@@ -17,9 +17,7 @@
       color: #1a1a2e;
       margin-bottom: 12px;
     }
-    .form-group {
-      margin-bottom: 12px;
-    }
+    .form-group { margin-bottom: 12px; }
     label {
       display: block;
       font-size: 12px;
@@ -27,7 +25,7 @@
       color: #4b5563;
       margin-bottom: 4px;
     }
-    input[type="text"] {
+    input[type="text"], select {
       width: 100%;
       padding: 10px 14px;
       background: white;
@@ -35,25 +33,42 @@
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 14px;
-      transition: all 0.2s;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.2s;
     }
-    input[type="text"]:focus {
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    input[type="text"]:focus, select:focus {
       outline: none;
       border-color: #0067b1;
       box-shadow: 0 0 0 3px rgba(0, 103, 177, 0.1);
     }
-    input[type="text"]:disabled {
+    input[type="text"].invalid, select.invalid {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+    input[type="text"]:disabled, select:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       background: #f9fafb;
     }
     input::placeholder { color: #9ca3af; }
     #serial { text-transform: uppercase; letter-spacing: 0.04em; }
+
     .hint {
       margin-top: 4px;
       font-size: 11px;
       color: #6b7280;
+      transition: color 0.15s;
     }
+    .hint.invalid { color: #dc2626; }
+
     .unknown {
       display: flex;
       align-items: flex-start;
@@ -68,32 +83,107 @@
       accent-color: #0067b1;
       cursor: pointer;
     }
+
+    /* ---------- submit button and its states ---------- */
     .submit-btn {
       width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
       padding: 10px 14px;
       background: white;
       color: #1a1a2e;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 14px;
+      font-family: inherit;
       font-weight: 500;
       cursor: pointer;
       text-align: left;
-      transition: all 0.2s;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
     }
-    .submit-btn:hover {
+    .submit-btn:hover:not(:disabled):not(.error) {
       border-color: #0067b1;
       background: #f0f5fa;
     }
-    .submit-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .submit-btn.submitted {
+    .submit-btn:focus-visible {
+      outline: none;
       border-color: #0067b1;
-      background: #e8f0fe;
-      font-weight: 600;
+      box-shadow: 0 0 0 3px rgba(0, 103, 177, 0.15);
     }
+
+    .submit-btn.error {
+      border-color: #dc2626;
+      background: #fef2f2;
+      color: #b91c1c;
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+    }
+
+    .submit-btn.sending {
+      cursor: progress;
+      color: #6b7280;
+      border-color: #d1d5db;
+      background: #f9fafb;
+    }
+
+    .submit-btn.submitted {
+      background: #0067b1;
+      border-color: #0067b1;
+      color: #ffffff;
+      cursor: default;
+      animation: settle 0.45s ease;
+    }
+    @keyframes settle {
+      0% { box-shadow: 0 0 0 0 rgba(0, 103, 177, 0.35); }
+      100% { box-shadow: 0 0 0 10px rgba(0, 103, 177, 0); }
+    }
+    .submit-btn:disabled { opacity: 1; }
+    .submit-btn.sending:disabled { opacity: 0.75; }
+
+    /* tick icon */
+    .tick {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.15s ease, transform 0.2s ease;
+    }
+    .tick path {
+      stroke: #ffffff;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      transition: stroke-dashoffset 0.35s ease 0.1s;
+    }
+    .submit-btn.submitted .tick { opacity: 1; transform: scale(1); }
+    .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
+
+    /* spinner */
+    .spinner {
+      flex: 0 0 auto;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #d1d5db;
+      border-top-color: #0067b1;
+      border-radius: 50%;
+      display: none;
+      animation: spin 0.7s linear infinite;
+    }
+    .submit-btn.sending .spinner { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     .status {
       margin-top: 10px;
       font-size: 12px;
@@ -104,6 +194,13 @@
     .status.show { display: block; }
     .status.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
     .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .tick { opacity: 0; }
+      .submit-btn.submitted .tick { opacity: 1; }
+      .tick path { stroke-dashoffset: 0; }
+    }
   </style>
 </head>
 <body>
@@ -112,8 +209,8 @@
   <form id="lookupForm" novalidate>
     <div class="form-group">
       <label for="serial">Device Serial Number:</label>
-      <input type="text" id="serial" inputmode="text" autocomplete="off" spellcheck="false" placeholder="SA1234567890" maxlength="15">
-      <div class="hint">Up to 15 characters. Hardware serials start with SA.</div>
+      <input type="text" id="serial" inputmode="text" autocomplete="off" spellcheck="false" placeholder="SA1234567890" maxlength="15" aria-describedby="serialHint">
+      <div class="hint" id="serialHint" data-default="Up to 15 characters. Hardware serials start with SA.">Up to 15 characters. Hardware serials start with SA.</div>
     </div>
 
     <label class="unknown" for="noSerial">
@@ -122,71 +219,129 @@
     </label>
 
     <div class="form-group">
-      <label for="postcode">Site Postcode:</label>
-      <input type="text" id="postcode" inputmode="numeric" autocomplete="postal-code" placeholder="2113" maxlength="4">
-      <div class="hint">The postcode where the device is installed.</div>
+      <label for="country">Country:</label>
+      <select id="country">
+        <option value="AU" selected>Australia</option>
+        <option value="NZ">New Zealand</option>
+        <option value="FJ">Fiji</option>
+        <option value="PG">Papua New Guinea</option>
+      </select>
     </div>
 
-    <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+    <div class="form-group">
+      <label for="locality" id="localityLabel">Site Postcode:</label>
+      <input type="text" id="locality" inputmode="numeric" autocomplete="postal-code" placeholder="2113" maxlength="4" aria-describedby="localityHint">
+      <div class="hint" id="localityHint">The postcode where the device is installed.</div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      <span id="btnLabel">Submit</span>
+      <span class="spinner" aria-hidden="true"></span>
+      <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5 8 14.5 16 5.5"/></svg>
+    </button>
   </form>
-  <div id="status" class="status"></div>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
 
   <script>
     (function () {
-      // Accepted postcode ranges. Australia only.
-      // Add [1000, 9999] style pairs here to accept New Zealand later.
-      const POSTCODE_RANGES = [
-        [200, 299],    // ACT (LVR)
-        [800, 999],    // NT
-        [1000, 2599],  // NSW
-        [2600, 2618],  // ACT
-        [2619, 2899],  // NSW
-        [2900, 2920],  // ACT
-        [2921, 2999],  // NSW
-        [3000, 3999],  // VIC
-        [4000, 4999],  // QLD
-        [5000, 5999],  // SA
-        [6000, 6797],  // WA
-        [6800, 6999],  // WA
-        [7000, 7999],  // TAS
-        [8000, 8999],  // VIC (LVR)
-        [9000, 9999]   // QLD (LVR)
-      ];
-
       const MAX_SERIAL_LENGTH = 15;
+      const ERROR_RESET_MS = 2000;
+      const SENDING_MS = 400;
+
+      // Per country rules. To add a country, add an entry here and a matching
+      // <option> above. Keys must match the option values.
+      const COUNTRIES = {
+        AU: {
+          name: 'Australia',
+          field: 'postcode',
+          label: 'Site Postcode:',
+          hint: 'The postcode where the device is installed.',
+          placeholder: '2113',
+          maxLength: 4,
+          digitsOnly: true,
+          pattern: /^\d{4}$/,
+          ranges: [
+            [200, 299],    // ACT (large volume receivers)
+            [800, 999],    // NT
+            [1000, 2599],  // NSW
+            [2600, 2618],  // ACT
+            [2619, 2899],  // NSW
+            [2900, 2920],  // ACT
+            [2921, 2999],  // NSW
+            [3000, 3999],  // VIC
+            [4000, 4999],  // QLD
+            [5000, 5999],  // SA
+            [6000, 6797],  // WA
+            [6800, 6999],  // WA
+            [7000, 7999],  // TAS
+            [8000, 8999],  // VIC (large volume receivers)
+            [9000, 9999]   // QLD (large volume receivers)
+          ],
+          error: 'That is not a valid Australian postcode. Enter the four digit postcode for the site.'
+        },
+        NZ: {
+          name: 'New Zealand',
+          field: 'postcode',
+          label: 'Site Postcode:',
+          hint: 'The four digit postcode where the device is installed.',
+          placeholder: '1010',
+          maxLength: 4,
+          digitsOnly: true,
+          pattern: /^\d{4}$/,
+          ranges: [
+            [110, 999],    // Northland, Rodney
+            [1010, 2999],  // Auckland
+            [3010, 3999],  // Waikato, Bay of Plenty
+            [4110, 4999],  // Gisborne, Hawke's Bay, Taranaki, Manawatu
+            [5010, 5999],  // Wairarapa, Kapiti, Hutt Valley
+            [6011, 6999],  // Wellington
+            [7010, 7999],  // Nelson, Marlborough, West Coast, Canterbury
+            [8011, 8999],  // Christchurch
+            [9010, 9893]   // Otago, Southland
+          ],
+          error: 'That is not a valid New Zealand postcode. Enter the four digit postcode for the site.'
+        },
+        PG: {
+          name: 'Papua New Guinea',
+          field: 'postcode',
+          label: 'Site Postcode:',
+          hint: 'Papua New Guinea postcodes are three digits, for example 121 for Port Moresby.',
+          placeholder: '121',
+          maxLength: 3,
+          digitsOnly: true,
+          pattern: /^\d{3}$/,
+          ranges: [[100, 999]],
+          error: 'That is not a valid Papua New Guinea postcode. Enter the three digit postcode for the site.'
+        },
+        FJ: {
+          name: 'Fiji',
+          field: 'town',
+          label: 'Site Town or City:',
+          hint: 'Fiji does not use postcodes. Enter the town or city where the device is installed.',
+          placeholder: 'Suva',
+          maxLength: 40,
+          digitsOnly: false,
+          error: 'Enter the town or city where the device is installed, at least two letters.'
+        }
+      };
 
       const form = document.getElementById('lookupForm');
       const serialInput = document.getElementById('serial');
-      const postcodeInput = document.getElementById('postcode');
+      const serialHint = document.getElementById('serialHint');
       const noSerial = document.getElementById('noSerial');
+      const countrySelect = document.getElementById('country');
+      const locality = document.getElementById('locality');
+      const localityLabel = document.getElementById('localityLabel');
+      const localityHint = document.getElementById('localityHint');
       const submitBtn = document.getElementById('submitBtn');
+      const btnLabel = document.getElementById('btnLabel');
       const status = document.getElementById('status');
 
-      // Serial: strip anything that is not alphanumeric, force uppercase, cap length.
-      serialInput.addEventListener('input', function () {
-        this.value = this.value
-          .replace(/[^a-zA-Z0-9]/g, '')
-          .toUpperCase()
-          .slice(0, MAX_SERIAL_LENGTH);
-      });
+      let errorTimer = null;
+      let locked = false;
 
-      // Postcode: digits only, four max.
-      postcodeInput.addEventListener('input', function () {
-        this.value = this.value.replace(/\D/g, '').slice(0, 4);
-      });
-
-      noSerial.addEventListener('change', function () {
-        serialInput.disabled = this.checked;
-        if (this.checked) { serialInput.value = ''; }
-        setStatus('', null);
-      });
-
-      function isValidAuPostcode(value) {
-        if (!/^\d{4}$/.test(value)) { return false; }
-        const n = parseInt(value, 10);
-        return POSTCODE_RANGES.some(function (range) {
-          return n >= range[0] && n <= range[1];
-        });
+      function rules() {
+        return COUNTRIES[countrySelect.value];
       }
 
       function setStatus(message, type) {
@@ -195,59 +350,180 @@
         if (type) { status.classList.add(type, 'show'); }
       }
 
+      function markField(input, hint, bad, message) {
+        input.classList.toggle('invalid', bad);
+        input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+        if (!hint) { return; }
+        hint.classList.toggle('invalid', bad);
+        if (bad && message) {
+          hint.textContent = message;
+        } else if (!bad) {
+          hint.textContent = hint.dataset.default || hint.textContent;
+        }
+      }
+
+      function clearErrors() {
+        if (locked) { return; }
+        clearTimeout(errorTimer);
+        submitBtn.classList.remove('error');
+        btnLabel.textContent = 'Submit';
+        markField(serialInput, serialHint, false);
+        markField(locality, localityHint, false);
+        setStatus('', null);
+      }
+
+      function failValidation(input, hint, message, hintMessage) {
+        clearTimeout(errorTimer);
+        markField(input, hint, true, hintMessage);
+        setStatus(message, 'error');
+
+        // restart the shake even on repeat clicks
+        submitBtn.classList.remove('error');
+        void submitBtn.offsetWidth;
+        submitBtn.classList.add('error');
+        btnLabel.textContent = 'Check the highlighted field';
+
+        errorTimer = setTimeout(function () {
+          submitBtn.classList.remove('error');
+          btnLabel.textContent = 'Submit';
+        }, ERROR_RESET_MS);
+
+        input.focus();
+      }
+
+      function applyCountry() {
+        const r = rules();
+        localityLabel.textContent = r.label;
+        localityHint.dataset.default = r.hint;
+        localityHint.textContent = r.hint;
+        locality.placeholder = r.placeholder;
+        locality.maxLength = r.maxLength;
+        locality.value = '';
+        locality.setAttribute('inputmode', r.digitsOnly ? 'numeric' : 'text');
+        locality.setAttribute('autocomplete', r.digitsOnly ? 'postal-code' : 'address-level2');
+        clearErrors();
+      }
+
+      // Serial: strip anything that is not alphanumeric, force uppercase, cap length.
+      serialInput.addEventListener('input', function () {
+        this.value = this.value
+          .replace(/[^a-zA-Z0-9]/g, '')
+          .toUpperCase()
+          .slice(0, MAX_SERIAL_LENGTH);
+        clearErrors();
+      });
+
+      locality.addEventListener('input', function () {
+        const r = rules();
+        if (r.digitsOnly) {
+          this.value = this.value.replace(/\D/g, '').slice(0, r.maxLength);
+        } else {
+          this.value = this.value.replace(/[^a-zA-Z\s'.-]/g, '').slice(0, r.maxLength);
+        }
+        clearErrors();
+      });
+
+      countrySelect.addEventListener('change', applyCountry);
+
+      noSerial.addEventListener('change', function () {
+        serialInput.disabled = this.checked;
+        if (this.checked) { serialInput.value = ''; }
+        clearErrors();
+      });
+
+      function isValidLocality(value) {
+        const r = rules();
+        if (r.field === 'town') {
+          return value.replace(/[^a-zA-Z]/g, '').length >= 2;
+        }
+        if (!r.pattern.test(value)) { return false; }
+        const n = parseInt(value, 10);
+        return r.ranges.some(function (range) {
+          return n >= range[0] && n <= range[1];
+        });
+      }
+
       function lock() {
+        locked = true;
         serialInput.disabled = true;
-        postcodeInput.disabled = true;
+        locality.disabled = true;
+        countrySelect.disabled = true;
         noSerial.disabled = true;
         submitBtn.disabled = true;
-        submitBtn.classList.add('submitted');
+      }
+
+      function send(payload) {
+        submitBtn.classList.add('sending');
+        submitBtn.disabled = true;
+        btnLabel.textContent = 'Sending';
+
+        setTimeout(function () {
+          try {
+            parent.window.postMessage('widget-message:' + payload, '*');
+            lock();
+            submitBtn.classList.remove('sending');
+            submitBtn.classList.add('submitted');
+            btnLabel.textContent = 'Details sent';
+            setStatus('Got it!', 'success');
+          } catch (err) {
+            console.error(err);
+            submitBtn.classList.remove('sending');
+            submitBtn.disabled = false;
+            btnLabel.textContent = 'Try again';
+            submitBtn.classList.add('error');
+            setStatus('Unable to connect to chat widget.', 'error');
+          }
+        }, SENDING_MS);
       }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        if (locked) { return; }
 
+        const r = rules();
         const serial = serialInput.value.trim();
-        const postcode = postcodeInput.value.trim();
+        const localityValue = locality.value.trim();
         const skipSerial = noSerial.checked;
 
         if (!skipSerial && serial.length === 0) {
-          setStatus('Enter your serial number, or tick the box if you cannot find it.', 'error');
-          serialInput.focus();
+          failValidation(
+            serialInput,
+            serialHint,
+            'Enter your serial number, or tick the box if you cannot find it.',
+            'Serial number is required.'
+          );
           return;
         }
 
-        if (!skipSerial && serial.length > MAX_SERIAL_LENGTH) {
-          setStatus('Serial numbers are no longer than ' + MAX_SERIAL_LENGTH + ' characters.', 'error');
-          serialInput.focus();
+        if (localityValue.length === 0) {
+          failValidation(
+            locality,
+            localityHint,
+            r.field === 'town' ? 'Enter the site town or city.' : 'Enter the site postcode.',
+            r.field === 'town' ? 'Town or city is required.' : 'Postcode is required.'
+          );
           return;
         }
 
-        if (postcode.length === 0) {
-          setStatus('Enter the site postcode.', 'error');
-          postcodeInput.focus();
+        if (!isValidLocality(localityValue)) {
+          failValidation(locality, localityHint, r.error, r.error);
           return;
         }
 
-        if (!isValidAuPostcode(postcode)) {
-          setStatus('That is not a valid Australian postcode. Enter the four digit postcode for the site.', 'error');
-          postcodeInput.focus();
-          return;
-        }
+        // This string becomes the user's visible message in the chat, the same
+        // way a data-value option button does, so it reads as a sentence.
+        const localityPart = r.field === 'town'
+          ? 'My site is in ' + localityValue + ', ' + r.name + '.'
+          : 'My site postcode is ' + localityValue + ' in ' + r.name + '.';
 
-        // Payload sent back to the chat. One readable line for extraction.
         const payload = skipSerial
-          ? 'Serial number: not known, Postcode: ' + postcode
-          : 'Serial number: ' + serial + ', Postcode: ' + postcode;
+          ? 'I do not know my serial number. ' + localityPart
+          : 'My serial number is ' + serial + '. ' + localityPart;
 
-        try {
-          parent.window.postMessage('widget-message:' + payload, '*');
-          lock();
-          setStatus('Got it!', 'success');
-        } catch (err) {
-          console.error(err);
-          setStatus('Unable to connect to chat widget.', 'error');
-        }
+        send(payload);
       });
+
+      applyCountry();
     })();
   </script>
 </body>
