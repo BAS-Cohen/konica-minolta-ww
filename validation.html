@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-AU">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Device Lookup</title>
@@ -17,7 +17,9 @@
       color: #1a1a2e;
       margin-bottom: 12px;
     }
-    .form-group { margin-bottom: 10px; }
+    .form-group {
+      margin-bottom: 8px;
+    }
     label {
       display: block;
       font-size: 12px;
@@ -25,38 +27,37 @@
       color: #4b5563;
       margin-bottom: 4px;
     }
-    input[type="text"], select {
+    input, select {
       width: 100%;
-      padding: 10px 12px;
+      padding: 10px 14px;
       background: white;
-      color: #111827;
+      color: #1a1a2e;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
-      transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+      transition: all 0.2s;
     }
     select {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 34px;
+      background-position: right 14px center;
+      padding-right: 36px;
       cursor: pointer;
     }
-    input[type="text"]:focus, select:focus {
+    input:focus, select:focus {
       outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      border-color: #1a3a5c;
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.1);
     }
-    input[type="text"].invalid, select.invalid {
+    input.invalid, select.invalid {
       border-color: #dc2626;
       box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
     }
-    input[type="text"]:disabled, select:disabled {
-      opacity: 0.55;
+    input:disabled, select:disabled {
+      opacity: 0.5;
       cursor: not-allowed;
-      background: #f9fafb;
     }
     input::placeholder { color: #9ca3af; }
     #serial { text-transform: uppercase; letter-spacing: 0.04em; }
@@ -65,7 +66,6 @@
       margin-top: 4px;
       font-size: 11px;
       color: #6b7280;
-      transition: color 0.15s;
     }
     .hint.invalid { color: #dc2626; }
 
@@ -73,48 +73,49 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      margin: 0 0 10px;
+      margin: 8px 0 10px;
       font-size: 12px;
       color: #4b5563;
       cursor: pointer;
     }
     .unknown input {
+      width: auto;
       margin-top: 1px;
       accent-color: #1a3a5c;
       cursor: pointer;
     }
 
-    /* ---------- submit button and its states ---------- */
     .submit-btn {
       width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 11px 14px;
-      background: #1a3a5c;
-      color: #ffffff;
-      border: 1px solid #1a3a5c;
+      padding: 10px 14px;
+      background: white;
+      color: #1a1a2e;
+      border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 14px;
-      font-family: inherit;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
-      margin-top: 4px;
-      transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+      text-align: left;
+      transition: all 0.2s;
     }
-    .submit-btn:hover:not(:disabled):not(.error) {
-      background: #254d73;
-      border-color: #254d73;
+    .submit-btn:hover {
+      border-color: #1a3a5c;
+      background: #f0f5fa;
     }
-    .submit-btn:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
-
+    .submit-btn.submitted {
+      border-color: #1a3a5c;
+      background: #e8f0fe;
+      color: #1a3a5c;
+      font-weight: 600;
+      opacity: 1;
+    }
     .submit-btn.error {
-      background: #fef2f2;
       border-color: #dc2626;
+      background: #fef2f2;
       color: #b91c1c;
       animation: shake 0.4s ease;
     }
@@ -126,43 +127,8 @@
       80% { transform: translateX(3px); }
     }
 
-    .submit-btn.submitted {
-      background: #1a3a5c;
-      border-color: #1a3a5c;
-      color: #ffffff;
-      cursor: default;
-      opacity: 1;
-      animation: settle 0.45s ease;
-    }
-    @keyframes settle {
-      0% { box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.35); }
-      100% { box-shadow: 0 0 0 10px rgba(26, 58, 92, 0); }
-    }
-    .submit-btn:disabled { opacity: 1; }
-
-    .tick {
-      flex: 0 0 auto;
-      width: 16px;
-      height: 16px;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 0.15s ease, transform 0.2s ease;
-    }
-    .tick path {
-      stroke: #ffffff;
-      stroke-width: 2.4;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-      stroke-dasharray: 22;
-      stroke-dashoffset: 22;
-      transition: stroke-dashoffset 0.35s ease 0.05s;
-    }
-    .submit-btn.submitted .tick { opacity: 1; transform: scale(1); }
-    .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
-
     .status {
-      margin-top: 8px;
+      margin-top: 10px;
       font-size: 12px;
       padding: 8px 12px;
       border-radius: 6px;
@@ -173,20 +139,17 @@
 
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
-      .tick { opacity: 0; }
-      .submit-btn.submitted .tick { opacity: 1; }
-      .tick path { stroke-dashoffset: 0; }
     }
   </style>
 </head>
 <body>
   <p class="heading">Look up your device:</p>
 
-  <form id="lookupForm" novalidate>
+  <form id="lookupForm">
     <div class="form-group">
       <label for="serial">Serial Number</label>
-      <input type="text" id="serial" inputmode="text" autocomplete="off" spellcheck="false" placeholder="SA1234567890" maxlength="15" aria-describedby="serialHint">
-      <div class="hint" id="serialHint" data-default="Up to 15 characters. Hardware serials start with SA.">Up to 15 characters. Hardware serials start with SA.</div>
+      <input type="text" id="serial" placeholder="SA1234567890" maxlength="15" autocomplete="off" spellcheck="false">
+      <div class="hint" id="serialHint">Up to 15 characters. Hardware serials start with SA.</div>
     </div>
 
     <label class="unknown" for="noSerial">
@@ -206,28 +169,20 @@
 
     <div class="form-group">
       <label for="locality" id="localityLabel">Post Code</label>
-      <input type="text" id="locality" inputmode="numeric" autocomplete="postal-code" placeholder="2113" maxlength="4" aria-describedby="localityHint">
+      <input type="text" id="locality" placeholder="2113" maxlength="4" autocomplete="postal-code">
       <div class="hint" id="localityHint">The postcode where the device is installed.</div>
     </div>
 
-    <button type="submit" class="submit-btn" id="submitBtn">
-      <span id="btnLabel">Submit</span>
-      <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5 8 14.5 16 5.5"/></svg>
-    </button>
+    <button type="submit" class="submit-btn" id="submitBtn">Submit device details</button>
   </form>
-  <div id="status" class="status" role="status" aria-live="polite"></div>
+  <div id="status" class="status"></div>
 
   <script>
     (function () {
-      const MAX_SERIAL_LENGTH = 15;
-      const ERROR_RESET_MS = 2000;
-
-      // Per country rules. To add a country, add an entry here and a matching
-      // <option> above. Keys must match the option values.
       const COUNTRIES = {
         AU: {
           name: 'Australia',
-          field: 'postcode',
+          key: 'Post Code',
           label: 'Post Code',
           hint: 'The postcode where the device is installed.',
           placeholder: '2113',
@@ -235,27 +190,15 @@
           digitsOnly: true,
           pattern: /^\d{4}$/,
           ranges: [
-            [200, 299],    // ACT (large volume receivers)
-            [800, 999],    // NT
-            [1000, 2599],  // NSW
-            [2600, 2618],  // ACT
-            [2619, 2899],  // NSW
-            [2900, 2920],  // ACT
-            [2921, 2999],  // NSW
-            [3000, 3999],  // VIC
-            [4000, 4999],  // QLD
-            [5000, 5999],  // SA
-            [6000, 6797],  // WA
-            [6800, 6999],  // WA
-            [7000, 7999],  // TAS
-            [8000, 8999],  // VIC (large volume receivers)
-            [9000, 9999]   // QLD (large volume receivers)
+            [200, 299], [800, 999], [1000, 2599], [2600, 2618], [2619, 2899],
+            [2900, 2920], [2921, 2999], [3000, 3999], [4000, 4999], [5000, 5999],
+            [6000, 6797], [6800, 6999], [7000, 7999], [8000, 8999], [9000, 9999]
           ],
-          error: 'That is not a valid Australian postcode. Enter the four digit postcode for the site.'
+          error: 'Please enter a valid Australian postcode.'
         },
         NZ: {
           name: 'New Zealand',
-          field: 'postcode',
+          key: 'Post Code',
           label: 'Post Code',
           hint: 'The four digit postcode where the device is installed.',
           placeholder: '1010',
@@ -263,39 +206,32 @@
           digitsOnly: true,
           pattern: /^\d{4}$/,
           ranges: [
-            [110, 999],    // Northland, Rodney
-            [1010, 2999],  // Auckland
-            [3010, 3999],  // Waikato, Bay of Plenty
-            [4110, 4999],  // Gisborne, Hawke's Bay, Taranaki, Manawatu
-            [5010, 5999],  // Wairarapa, Kapiti, Hutt Valley
-            [6011, 6999],  // Wellington
-            [7010, 7999],  // Nelson, Marlborough, West Coast, Canterbury
-            [8011, 8999],  // Christchurch
-            [9010, 9893]   // Otago, Southland
+            [110, 999], [1010, 2999], [3010, 3999], [4110, 4999], [5010, 5999],
+            [6011, 6999], [7010, 7999], [8011, 8999], [9010, 9893]
           ],
-          error: 'That is not a valid New Zealand postcode. Enter the four digit postcode for the site.'
+          error: 'Please enter a valid New Zealand postcode.'
         },
         PG: {
           name: 'Papua New Guinea',
-          field: 'postcode',
+          key: 'Post Code',
           label: 'Post Code',
-          hint: 'Papua New Guinea postcodes are three digits, for example 121 for Port Moresby.',
+          hint: 'Papua New Guinea postcodes are three digits, for example 121.',
           placeholder: '121',
           maxLength: 3,
           digitsOnly: true,
           pattern: /^\d{3}$/,
           ranges: [[100, 999]],
-          error: 'That is not a valid Papua New Guinea postcode. Enter the three digit postcode for the site.'
+          error: 'Please enter a valid Papua New Guinea postcode.'
         },
         FJ: {
           name: 'Fiji',
-          field: 'town',
+          key: 'Town',
           label: 'Town or City',
-          hint: 'Fiji does not use postcodes. Enter the town or city where the device is installed.',
+          hint: 'Fiji does not use postcodes. Enter the town or city.',
           placeholder: 'Suva',
           maxLength: 40,
           digitsOnly: false,
-          error: 'Enter the town or city where the device is installed, at least two letters.'
+          error: 'Please enter the town or city where the device is installed.'
         }
       };
 
@@ -308,59 +244,48 @@
       const localityLabel = document.getElementById('localityLabel');
       const localityHint = document.getElementById('localityHint');
       const submitBtn = document.getElementById('submitBtn');
-      const btnLabel = document.getElementById('btnLabel');
       const status = document.getElementById('status');
 
       let errorTimer = null;
-      let locked = false;
 
       function rules() {
         return COUNTRIES[countrySelect.value];
       }
 
-      function setStatus(message) {
+      function setStatus(message, type) {
         status.textContent = message || '';
-        status.classList.toggle('show', Boolean(message));
-        status.classList.toggle('error', Boolean(message));
-      }
-
-      function markField(input, hint, bad, message) {
-        input.classList.toggle('invalid', bad);
-        input.setAttribute('aria-invalid', bad ? 'true' : 'false');
-        if (!hint) { return; }
-        hint.classList.toggle('invalid', bad);
-        if (bad && message) {
-          hint.textContent = message;
-        } else if (!bad) {
-          hint.textContent = hint.dataset.default || hint.textContent;
-        }
+        status.classList.remove('error', 'show');
+        if (type) { status.classList.add(type, 'show'); }
       }
 
       function clearErrors() {
-        if (locked) { return; }
         clearTimeout(errorTimer);
         submitBtn.classList.remove('error');
-        btnLabel.textContent = 'Submit';
-        markField(serialInput, serialHint, false);
-        markField(locality, localityHint, false);
-        setStatus('');
+        if (!submitBtn.classList.contains('submitted')) {
+          submitBtn.textContent = 'Submit device details';
+        }
+        serialInput.classList.remove('invalid');
+        serialHint.classList.remove('invalid');
+        locality.classList.remove('invalid');
+        localityHint.classList.remove('invalid');
+        setStatus('', null);
       }
 
-      function failValidation(input, hint, message, hintMessage) {
+      function fail(input, hint, message) {
         clearTimeout(errorTimer);
-        markField(input, hint, true, hintMessage);
-        setStatus(message);
+        input.classList.add('invalid');
+        hint.classList.add('invalid');
+        setStatus(message, 'error');
 
-        // restart the shake even on repeat clicks
         submitBtn.classList.remove('error');
         void submitBtn.offsetWidth;
         submitBtn.classList.add('error');
-        btnLabel.textContent = 'Check the highlighted field';
+        submitBtn.textContent = 'Check the highlighted field';
 
         errorTimer = setTimeout(function () {
           submitBtn.classList.remove('error');
-          btnLabel.textContent = 'Submit';
-        }, ERROR_RESET_MS);
+          submitBtn.textContent = 'Submit device details';
+        }, 2000);
 
         input.focus();
       }
@@ -368,22 +293,15 @@
       function applyCountry() {
         const r = rules();
         localityLabel.textContent = r.label;
-        localityHint.dataset.default = r.hint;
         localityHint.textContent = r.hint;
         locality.placeholder = r.placeholder;
         locality.maxLength = r.maxLength;
         locality.value = '';
-        locality.setAttribute('inputmode', r.digitsOnly ? 'numeric' : 'text');
-        locality.setAttribute('autocomplete', r.digitsOnly ? 'postal-code' : 'address-level2');
         clearErrors();
       }
 
-      // Serial: strip anything that is not alphanumeric, force uppercase, cap length.
       serialInput.addEventListener('input', function () {
-        this.value = this.value
-          .replace(/[^a-zA-Z0-9]/g, '')
-          .toUpperCase()
-          .slice(0, MAX_SERIAL_LENGTH);
+        this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 15);
         clearErrors();
       });
 
@@ -405,9 +323,9 @@
         clearErrors();
       });
 
-      function isValidLocality(value) {
+      function localityValid(value) {
         const r = rules();
-        if (r.field === 'town') {
+        if (!r.digitsOnly) {
           return value.replace(/[^a-zA-Z]/g, '').length >= 2;
         }
         if (!r.pattern.test(value)) { return false; }
@@ -417,62 +335,45 @@
         });
       }
 
-      function lock() {
-        locked = true;
-        serialInput.disabled = true;
-        locality.disabled = true;
-        countrySelect.disabled = true;
-        noSerial.disabled = true;
-        submitBtn.disabled = true;
-        submitBtn.classList.remove('error');
-        submitBtn.classList.add('submitted');
-        btnLabel.textContent = 'Details sent';
-      }
-
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        if (locked) { return; }
 
         const r = rules();
         const serial = serialInput.value.trim();
         const localityValue = locality.value.trim();
         const skipSerial = noSerial.checked;
 
-        if (!skipSerial && serial.length === 0) {
-          failValidation(
-            serialInput,
-            serialHint,
-            'Enter your serial number, or tick the box if you cannot find it.',
-            'Serial number is required.'
-          );
+        if (!skipSerial && !serial) {
+          fail(serialInput, serialHint, 'Please enter your serial number, or tick the box if you cannot find it.');
           return;
         }
 
-        if (localityValue.length === 0) {
-          failValidation(
-            locality,
-            localityHint,
-            r.field === 'town' ? 'Enter the site town or city.' : 'Enter the site postcode.',
-            r.field === 'town' ? 'Town or city is required.' : 'Postcode is required.'
-          );
+        if (!localityValue) {
+          fail(locality, localityHint, 'Please enter the ' + r.label.toLowerCase() + '.');
           return;
         }
 
-        if (!isValidLocality(localityValue)) {
-          failValidation(locality, localityHint, r.error, r.error);
+        if (!localityValid(localityValue)) {
+          fail(locality, localityHint, r.error);
           return;
         }
-
-        const localityKey = r.field === 'town' ? 'Town' : 'Post Code';
-        const serialValue = skipSerial ? 'Not known' : serial;
-        const message = `Serial Number: ${serialValue}, ${localityKey}: ${localityValue}`;
 
         try {
-          parent.window.postMessage('widget-message:' + message, '*');
-          lock();
+          parent.window.postMessage(
+            'widget-message:Serial Number: ' + (skipSerial ? 'Not known' : serial) + ', ' + r.key + ': ' + localityValue,
+            '*'
+          );
+          serialInput.disabled = true;
+          locality.disabled = true;
+          countrySelect.disabled = true;
+          noSerial.disabled = true;
+          submitBtn.disabled = true;
+          submitBtn.classList.remove('error');
+          submitBtn.classList.add('submitted');
+          submitBtn.textContent = 'Details sent';
         } catch (err) {
           console.error(err);
-          setStatus('Unable to connect to chat widget.');
+          setStatus('Unable to connect to chat widget.', 'error');
         }
       });
 
