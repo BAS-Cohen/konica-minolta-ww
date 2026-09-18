@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Device Lookup</title>
+  <title>Patient Information</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,7 +18,7 @@
       margin-bottom: 12px;
     }
     .form-group {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     label {
       display: block;
@@ -27,108 +27,44 @@
       color: #4b5563;
       margin-bottom: 4px;
     }
-    input, select {
+    input {
       width: 100%;
-      padding: 10px 14px;
-      background: white;
-      color: #1a1a2e;
+      padding: 10px 12px;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 14px;
-      font-family: inherit;
-      transition: all 0.2s;
+      color: #111827;
+      background: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    select {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-      cursor: pointer;
-    }
-    input:focus, select:focus {
+    input:focus {
       outline: none;
-      border-color: #1a3a5c;
-      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.1);
-    }
-    input.invalid, select.invalid {
-      border-color: #dc2626;
-      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-    }
-    input:disabled, select:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
     }
     input::placeholder { color: #9ca3af; }
-    #serial { text-transform: uppercase; letter-spacing: 0.04em; }
-
-    .hint {
-      margin-top: 4px;
-      font-size: 11px;
-      color: #6b7280;
-    }
-    .hint.invalid { color: #dc2626; }
-
-    .unknown {
+    .row {
       display: flex;
-      align-items: flex-start;
       gap: 8px;
-      margin: 8px 0 10px;
-      font-size: 12px;
-      color: #4b5563;
-      cursor: pointer;
     }
-    .unknown input {
-      width: auto;
-      margin-top: 1px;
-      accent-color: #1a3a5c;
-      cursor: pointer;
-    }
-
+    .row .form-group { flex: 1; }
     .submit-btn {
       width: 100%;
-      padding: 10px 14px;
-      background: white;
-      color: #1a1a2e;
-      border: 1px solid #d1d5db;
+      padding: 11px;
+      background: #1a3a5c;
+      color: white;
+      border: none;
       border-radius: 8px;
       font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s;
-    }
-    .submit-btn:hover {
-      border-color: #1a3a5c;
-      background: #f0f5fa;
-    }
-    .submit-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .submit-btn.submitted {
-      border-color: #1a3a5c;
-      background: #e8f0fe;
-      color: #1a3a5c;
       font-weight: 600;
-      opacity: 1;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.2s;
     }
-    .submit-btn.error {
-      border-color: #dc2626;
-      background: #fef2f2;
-      color: #b91c1c;
-      animation: shake 0.4s ease;
-    }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-4px); }
-      40% { transform: translateX(4px); }
-      60% { transform: translateX(-3px); }
-      80% { transform: translateX(3px); }
-    }
-
+    .submit-btn:hover { background: #254d73; }
+    .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
     .status {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 12px;
       padding: 8px 12px;
       border-radius: 6px;
@@ -136,248 +72,99 @@
     }
     .status.show { display: block; }
     .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-    }
+    .status.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
   </style>
 </head>
 <body>
-  <p class="heading">Look up your device:</p>
-
-  <form id="lookupForm">
-    <div class="form-group">
-      <label for="serial">Serial Number</label>
-      <input type="text" id="serial" placeholder="SA1234567890" maxlength="15" autocomplete="off" spellcheck="false">
-      <div class="hint" id="serialHint">Up to 15 characters. Hardware serials start with SA.</div>
+  <p class="heading">Please provide your information:</p>
+  <form id="patientForm">
+    <div class="row">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" placeholder="John" required>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" placeholder="Smith" required>
+      </div>
     </div>
-
-    <label class="unknown" for="noSerial">
-      <input type="checkbox" id="noSerial">
-      <span>I do not know my serial number</span>
-    </label>
-
-    <div class="form-group">
-      <label for="country">Country</label>
-      <select id="country">
-        <option value="AU" selected>Australia</option>
-        <option value="NZ">New Zealand</option>
-        <option value="FJ">Fiji</option>
-        <option value="PG">Papua New Guinea</option>
-      </select>
+    <div class="row">
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="text" id="dob" placeholder="MM/DD/YYYY" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+      </div>
     </div>
-
-    <div class="form-group">
-      <label for="locality" id="localityLabel">Post Code</label>
-      <input type="text" id="locality" placeholder="2113" maxlength="4" autocomplete="postal-code">
-      <div class="hint" id="localityHint">The postcode where the device is installed.</div>
-    </div>
-
-    <button type="submit" class="submit-btn" id="submitBtn">Submit device details</button>
+    <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
   </form>
   <div id="status" class="status"></div>
 
   <script>
     (function () {
-      const COUNTRIES = {
-        AU: {
-          name: 'Australia',
-          key: 'Post Code',
-          label: 'Post Code',
-          hint: 'The postcode where the device is installed.',
-          placeholder: '2113',
-          maxLength: 4,
-          digitsOnly: true,
-          pattern: /^\d{4}$/,
-          ranges: [
-            [200, 299], [800, 999], [1000, 2599], [2600, 2618], [2619, 2899],
-            [2900, 2920], [2921, 2999], [3000, 3999], [4000, 4999], [5000, 5999],
-            [6000, 6797], [6800, 6999], [7000, 7999], [8000, 8999], [9000, 9999]
-          ],
-          error: 'Please enter a valid Australian postcode.'
-        },
-        NZ: {
-          name: 'New Zealand',
-          key: 'Post Code',
-          label: 'Post Code',
-          hint: 'The four digit postcode where the device is installed.',
-          placeholder: '1010',
-          maxLength: 4,
-          digitsOnly: true,
-          pattern: /^\d{4}$/,
-          ranges: [
-            [110, 999], [1010, 2999], [3010, 3999], [4110, 4999], [5010, 5999],
-            [6011, 6999], [7010, 7999], [8011, 8999], [9010, 9893]
-          ],
-          error: 'Please enter a valid New Zealand postcode.'
-        },
-        PG: {
-          name: 'Papua New Guinea',
-          key: 'Post Code',
-          label: 'Post Code',
-          hint: 'Papua New Guinea postcodes are three digits, for example 121.',
-          placeholder: '121',
-          maxLength: 3,
-          digitsOnly: true,
-          pattern: /^\d{3}$/,
-          ranges: [[100, 999]],
-          error: 'Please enter a valid Papua New Guinea postcode.'
-        },
-        FJ: {
-          name: 'Fiji',
-          key: 'Town',
-          label: 'Town or City',
-          hint: 'Fiji does not use postcodes. Enter the town or city.',
-          placeholder: 'Suva',
-          maxLength: 40,
-          digitsOnly: false,
-          error: 'Please enter the town or city where the device is installed.'
-        }
-      };
-
-      const form = document.getElementById('lookupForm');
-      const serialInput = document.getElementById('serial');
-      const serialHint = document.getElementById('serialHint');
-      const noSerial = document.getElementById('noSerial');
-      const countrySelect = document.getElementById('country');
-      const locality = document.getElementById('locality');
-      const localityLabel = document.getElementById('localityLabel');
-      const localityHint = document.getElementById('localityHint');
-      const submitBtn = document.getElementById('submitBtn');
+      const form = document.getElementById('patientForm');
       const status = document.getElementById('status');
+      const submitBtn = document.getElementById('submitBtn');
 
-      let errorTimer = null;
+      // Auto-format date of birth
+      const dobInput = document.getElementById('dob');
+      dobInput.addEventListener('input', function (e) {
+        let val = this.value.replace(/\D/g, '');
+        if (val.length > 2 && val.length <= 4) {
+          val = val.slice(0, 2) + '/' + val.slice(2);
+        } else if (val.length > 4) {
+          val = val.slice(0, 2) + '/' + val.slice(2, 4) + '/' + val.slice(4, 8);
+        }
+        this.value = val;
+      });
 
-      function rules() {
-        return COUNTRIES[countrySelect.value];
-      }
+      // Auto-format phone number
+      const phoneInput = document.getElementById('phone');
+      phoneInput.addEventListener('input', function (e) {
+        let val = this.value.replace(/\D/g, '');
+        if (val.length > 6) {
+          val = '(' + val.slice(0, 3) + ') ' + val.slice(3, 6) + '-' + val.slice(6, 10);
+        } else if (val.length > 3) {
+          val = '(' + val.slice(0, 3) + ') ' + val.slice(3);
+        } else if (val.length > 0) {
+          val = '(' + val;
+        }
+        this.value = val;
+      });
 
       function setStatus(message, type) {
         status.textContent = message || '';
-        status.classList.remove('error', 'show');
+        status.classList.remove('error', 'success', 'show');
         if (type) { status.classList.add(type, 'show'); }
-      }
-
-      function clearErrors() {
-        clearTimeout(errorTimer);
-        submitBtn.classList.remove('error');
-        if (!submitBtn.classList.contains('submitted')) {
-          submitBtn.textContent = 'Submit device details';
-        }
-        serialInput.classList.remove('invalid');
-        serialHint.classList.remove('invalid');
-        locality.classList.remove('invalid');
-        localityHint.classList.remove('invalid');
-        setStatus('', null);
-      }
-
-      function fail(input, hint, message) {
-        clearTimeout(errorTimer);
-        input.classList.add('invalid');
-        hint.classList.add('invalid');
-        setStatus(message, 'error');
-
-        submitBtn.classList.remove('error');
-        void submitBtn.offsetWidth;
-        submitBtn.classList.add('error');
-        submitBtn.textContent = 'Check the highlighted field';
-
-        errorTimer = setTimeout(function () {
-          submitBtn.classList.remove('error');
-          submitBtn.textContent = 'Submit device details';
-        }, 2000);
-
-        input.focus();
-      }
-
-      function applyCountry() {
-        const r = rules();
-        localityLabel.textContent = r.label;
-        localityHint.textContent = r.hint;
-        locality.placeholder = r.placeholder;
-        locality.maxLength = r.maxLength;
-        locality.value = '';
-        clearErrors();
-      }
-
-      serialInput.addEventListener('input', function () {
-        this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 15);
-        clearErrors();
-      });
-
-      locality.addEventListener('input', function () {
-        const r = rules();
-        if (r.digitsOnly) {
-          this.value = this.value.replace(/\D/g, '').slice(0, r.maxLength);
-        } else {
-          this.value = this.value.replace(/[^a-zA-Z\s'.-]/g, '').slice(0, r.maxLength);
-        }
-        clearErrors();
-      });
-
-      countrySelect.addEventListener('change', applyCountry);
-
-      noSerial.addEventListener('change', function () {
-        serialInput.disabled = this.checked;
-        if (this.checked) { serialInput.value = ''; }
-        clearErrors();
-      });
-
-      function localityValid(value) {
-        const r = rules();
-        if (!r.digitsOnly) {
-          return value.replace(/[^a-zA-Z]/g, '').length >= 2;
-        }
-        if (!r.pattern.test(value)) { return false; }
-        const n = parseInt(value, 10);
-        return r.ranges.some(function (range) {
-          return n >= range[0] && n <= range[1];
-        });
       }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const r = rules();
-        const serial = serialInput.value.trim();
-        const localityValue = locality.value.trim();
-        const skipSerial = noSerial.checked;
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const dob = document.getElementById('dob').value.trim();
+        const phone = document.getElementById('phone').value.trim();
 
-        if (!skipSerial && !serial) {
-          fail(serialInput, serialHint, 'Please enter your serial number, or tick the box if you cannot find it.');
+        if (!firstName || !lastName || !dob || !phone) {
+          setStatus('Please fill in all fields.', 'error');
           return;
         }
 
-        if (!localityValue) {
-          fail(locality, localityHint, 'Please enter the ' + r.label.toLowerCase() + '.');
-          return;
-        }
-
-        if (!localityValid(localityValue)) {
-          fail(locality, localityHint, r.error);
-          return;
-        }
+        const message = `First Name: ${firstName}, Last Name: ${lastName}, Date of Birth: ${dob}, Phone: ${phone}`;
 
         try {
-          parent.window.postMessage(
-            'widget-message:Serial Number: ' + (skipSerial ? 'Not known' : serial) + ', ' + r.key + ': ' + localityValue,
-            '*'
-          );
-          serialInput.disabled = true;
-          locality.disabled = true;
-          countrySelect.disabled = true;
-          noSerial.disabled = true;
+          parent.window.postMessage('widget-message:' + message, '*');
+          setStatus('Information submitted!', 'success');
           submitBtn.disabled = true;
-          submitBtn.classList.remove('error');
-          submitBtn.classList.add('submitted');
-          submitBtn.textContent = 'Details sent';
+          form.querySelectorAll('input').forEach(function (input) { input.disabled = true; });
         } catch (err) {
           console.error(err);
           setStatus('Unable to connect to chat widget.', 'error');
         }
       });
-
-      applyCountry();
     })();
   </script>
 </body>
