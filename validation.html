@@ -463,13 +463,10 @@
           return;
         }
 
-        // This string becomes the user's message in the chat.
-        const serialLine = 'Serial Number: ' + (skipSerial ? 'Not known' : serial);
-        const localityLine = (r.field === 'town' ? 'Town: ' : 'Post Code: ') + localityValue;
-        const message = serialLine + '\n' + localityLine;
+        const localityKey = r.field === 'town' ? 'Town' : 'Post Code';
+        const serialValue = skipSerial ? 'Not known' : serial;
+        const message = `Serial Number: ${serialValue}, ${localityKey}: ${localityValue}`;
 
-        // Posted synchronously inside the submit handler, same as the
-        // option buttons. Do not wrap this in a timer.
         try {
           parent.window.postMessage('widget-message:' + message, '*');
           lock();
