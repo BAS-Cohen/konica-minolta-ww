@@ -333,449 +333,436 @@
   ></div>
 
   <script>
-    (function () {
+(function () {
 
-      const MAX_SERIAL_LENGTH = 15;
-      const ERROR_RESET_MS = 2000;
+  const MAX_SERIAL_LENGTH = 15;
+  const ERROR_RESET_MS = 2000;
 
-      // Per country rules.
-      const COUNTRIES = {
+  const COUNTRIES = {
 
-        AU: {
-          name: 'Australia',
-          field: 'postcode',
-          label: 'Post Code',
-          hint: 'The postcode where the device is installed.',
-          placeholder: '2113',
-          maxLength: 4,
-          digitsOnly: true,
-          pattern: /^\d{4}$/,
-          ranges: [
-            [200, 299],
-            [800, 999],
-            [1000, 2599],
-            [2600, 2618],
-            [2619, 2899],
-            [2900, 2920],
-            [2921, 2999],
-            [3000, 3999],
-            [4000, 4999],
-            [5000, 5999],
-            [6000, 6797],
-            [6800, 6999],
-            [7000, 7999],
-            [8000, 8999],
-            [9000, 9999]
-          ],
-          error: 'That is not a valid Australian postcode. Enter the four digit postcode for the site.'
-        },
+    AU: {
+      name: 'Australia',
+      field: 'postcode',
+      label: 'Post Code',
+      hint: 'The postcode where the device is installed.',
+      placeholder: '2113',
+      maxLength: 4,
+      digitsOnly: true,
+      pattern: /^\d{4}$/,
+      ranges: [
+        [200, 299],
+        [800, 999],
+        [1000, 2599],
+        [2600, 2618],
+        [2619, 2899],
+        [2900, 2920],
+        [2921, 2999],
+        [3000, 3999],
+        [4000, 4999],
+        [5000, 5999],
+        [6000, 6797],
+        [6800, 6999],
+        [7000, 7999],
+        [8000, 8999],
+        [9000, 9999]
+      ],
+      error: 'That is not a valid Australian postcode. Enter the four digit postcode for the site.'
+    },
 
-        NZ: {
-          name: 'New Zealand',
-          field: 'postcode',
-          label: 'Post Code',
-          hint: 'The four digit postcode where the device is installed.',
-          placeholder: '1010',
-          maxLength: 4,
-          digitsOnly: true,
-          pattern: /^\d{4}$/,
-          ranges: [
-            [110, 999],
-            [1010, 2999],
-            [3010, 3999],
-            [4110, 4999],
-            [5010, 5999],
-            [6011, 6999],
-            [7010, 7999],
-            [8011, 8999],
-            [9010, 9893]
-          ],
-          error: 'That is not a valid New Zealand postcode. Enter the four digit postcode for the site.'
-        },
+    NZ: {
+      name: 'New Zealand',
+      field: 'postcode',
+      label: 'Post Code',
+      hint: 'The four digit postcode where the device is installed.',
+      placeholder: '1010',
+      maxLength: 4,
+      digitsOnly: true,
+      pattern: /^\d{4}$/,
+      ranges: [
+        [110, 999],
+        [1010, 2999],
+        [3010, 3999],
+        [4110, 4999],
+        [5010, 5999],
+        [6011, 6999],
+        [7010, 7999],
+        [8011, 8999],
+        [9010, 9893]
+      ],
+      error: 'That is not a valid New Zealand postcode. Enter the four digit postcode for the site.'
+    },
 
-        PG: {
-          name: 'Papua New Guinea',
-          field: 'postcode',
-          label: 'Post Code',
-          hint: 'Papua New Guinea postcodes are three digits, for example 121 for Port Moresby.',
-          placeholder: '121',
-          maxLength: 3,
-          digitsOnly: true,
-          pattern: /^\d{3}$/,
-          ranges: [[100, 999]],
-          error: 'That is not a valid Papua New Guinea postcode. Enter the three digit postcode for the site.'
-        },
+    PG: {
+      name: 'Papua New Guinea',
+      field: 'postcode',
+      label: 'Post Code',
+      hint: 'Papua New Guinea postcodes are three digits, for example 121 for Port Moresby.',
+      placeholder: '121',
+      maxLength: 3,
+      digitsOnly: true,
+      pattern: /^\d{3}$/,
+      ranges: [[100, 999]],
+      error: 'That is not a valid Papua New Guinea postcode. Enter the three digit postcode for the site.'
+    },
 
-        FJ: {
-          name: 'Fiji',
-          field: 'town',
-          label: 'Town or City',
-          hint: 'Fiji does not use postcodes. Enter the town or city where the device is installed.',
-          placeholder: 'Suva',
-          maxLength: 40,
-          digitsOnly: false,
-          error: 'Enter the town or city where the device is installed, at least two letters.'
-        }
+    FJ: {
+      name: 'Fiji',
+      field: 'town',
+      label: 'Town or City',
+      hint: 'Fiji does not use postcodes. Enter the town or city where the device is installed.',
+      placeholder: 'Suva',
+      maxLength: 40,
+      digitsOnly: false,
+      error: 'Enter the town or city where the device is installed, at least two letters.'
+    }
 
-      };
+  };
 
-      const form = document.getElementById('lookupForm');
-      const serialInput = document.getElementById('serial');
-      const serialHint = document.getElementById('serialHint');
-      const noSerial = document.getElementById('noSerial');
-      const countrySelect = document.getElementById('country');
-      const locality = document.getElementById('locality');
-      const localityLabel = document.getElementById('localityLabel');
-      const localityHint = document.getElementById('localityHint');
-      const submitBtn = document.getElementById('submitBtn');
-      const btnLabel = document.getElementById('btnLabel');
-      const status = document.getElementById('status');
+  const form = document.getElementById('lookupForm');
+  const serialInput = document.getElementById('serial');
+  const serialHint = document.getElementById('serialHint');
+  const noSerial = document.getElementById('noSerial');
+  const countrySelect = document.getElementById('country');
+  const locality = document.getElementById('locality');
+  const localityLabel = document.getElementById('localityLabel');
+  const localityHint = document.getElementById('localityHint');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnLabel = document.getElementById('btnLabel');
+  const status = document.getElementById('status');
 
-      let errorTimer = null;
-      let locked = false;
+  let errorTimer = null;
+  let locked = false;
 
-      function rules() {
-        return COUNTRIES[countrySelect.value];
+  function rules() {
+    return COUNTRIES[countrySelect.value];
+  }
+
+  function setStatus(message) {
+    status.textContent = message || '';
+    status.classList.toggle('show', Boolean(message));
+    status.classList.toggle('error', Boolean(message));
+  }
+
+  function markField(input, hint, bad, message) {
+
+    input.classList.toggle('invalid', bad);
+
+    input.setAttribute(
+      'aria-invalid',
+      bad ? 'true' : 'false'
+    );
+
+    if (!hint) {
+      return;
+    }
+
+    hint.classList.toggle('invalid', bad);
+
+    if (bad && message) {
+      hint.textContent = message;
+    } else if (!bad) {
+      hint.textContent =
+        hint.dataset.default || hint.textContent;
+    }
+  }
+
+  function clearErrors() {
+
+    if (locked) {
+      return;
+    }
+
+    clearTimeout(errorTimer);
+
+    submitBtn.classList.remove('error');
+    btnLabel.textContent = 'Submit';
+
+    markField(
+      serialInput,
+      serialHint,
+      false
+    );
+
+    markField(
+      locality,
+      localityHint,
+      false
+    );
+
+    setStatus('');
+  }
+
+  function failValidation(
+    input,
+    hint,
+    message,
+    hintMessage
+  ) {
+
+    clearTimeout(errorTimer);
+
+    markField(
+      input,
+      hint,
+      true,
+      hintMessage
+    );
+
+    setStatus(message);
+
+    submitBtn.classList.remove('error');
+
+    void submitBtn.offsetWidth;
+
+    submitBtn.classList.add('error');
+
+    btnLabel.textContent =
+      'Check the highlighted field';
+
+    errorTimer = setTimeout(function () {
+
+      submitBtn.classList.remove('error');
+
+      btnLabel.textContent = 'Submit';
+
+    }, ERROR_RESET_MS);
+
+    input.focus();
+  }
+
+  function applyCountry() {
+
+    const r = rules();
+
+    localityLabel.textContent = r.label;
+
+    localityHint.dataset.default = r.hint;
+    localityHint.textContent = r.hint;
+
+    locality.placeholder = r.placeholder;
+
+    locality.maxLength = r.maxLength;
+
+    locality.value = '';
+
+    locality.setAttribute(
+      'inputmode',
+      r.digitsOnly ? 'numeric' : 'text'
+    );
+
+    locality.setAttribute(
+      'autocomplete',
+      r.digitsOnly
+        ? 'postal-code'
+        : 'address-level2'
+    );
+
+    clearErrors();
+  }
+
+  serialInput.addEventListener(
+    'input',
+    function () {
+
+      this.value = this.value
+        .replace(/[^a-zA-Z0-9]/g, '')
+        .toUpperCase()
+        .slice(0, MAX_SERIAL_LENGTH);
+
+      clearErrors();
+    }
+  );
+
+  locality.addEventListener(
+    'input',
+    function () {
+
+      const r = rules();
+
+      if (r.digitsOnly) {
+
+        this.value = this.value
+          .replace(/\D/g, '')
+          .slice(0, r.maxLength);
+
+      } else {
+
+        this.value = this.value
+          .replace(/[^a-zA-Z\s'.-]/g, '')
+          .slice(0, r.maxLength);
       }
 
-      function setStatus(message) {
-        status.textContent = message || '';
-        status.classList.toggle('show', Boolean(message));
-        status.classList.toggle('error', Boolean(message));
+      clearErrors();
+    }
+  );
+
+  countrySelect.addEventListener(
+    'change',
+    applyCountry
+  );
+
+  noSerial.addEventListener(
+    'change',
+    function () {
+
+      serialInput.disabled = this.checked;
+
+      if (this.checked) {
+        serialInput.value = '';
       }
 
-      function markField(input, hint, bad, message) {
+      clearErrors();
+    }
+  );
 
-        input.classList.toggle('invalid', bad);
+  function isValidLocality(value) {
 
-        input.setAttribute(
-          'aria-invalid',
-          bad ? 'true' : 'false'
-        );
+    const r = rules();
 
-        if (!hint) {
-          return;
-        }
+    if (r.field === 'town') {
 
-        hint.classList.toggle('invalid', bad);
+      return value
+        .replace(/[^a-zA-Z]/g, '')
+        .length >= 2;
+    }
 
-        if (bad && message) {
-          hint.textContent = message;
-        } else if (!bad) {
-          hint.textContent =
-            hint.dataset.default || hint.textContent;
-        }
+    if (!r.pattern.test(value)) {
+      return false;
+    }
+
+    const n = parseInt(value, 10);
+
+    return r.ranges.some(function (range) {
+      return n >= range[0] && n <= range[1];
+    });
+  }
+
+  function lock() {
+
+    locked = true;
+
+    serialInput.disabled = true;
+    locality.disabled = true;
+    countrySelect.disabled = true;
+    noSerial.disabled = true;
+    submitBtn.disabled = true;
+
+    submitBtn.classList.remove('error');
+    submitBtn.classList.add('submitted');
+
+    btnLabel.textContent = 'Details sent';
+  }
+
+  form.addEventListener(
+    'submit',
+    function (e) {
+
+      e.preventDefault();
+
+      if (locked) {
+        return;
       }
 
-      function clearErrors() {
+      const r = rules();
 
-        if (locked) {
-          return;
-        }
+      const serial =
+        serialInput.value.trim();
 
-        clearTimeout(errorTimer);
+      const localityValue =
+        locality.value.trim();
 
-        submitBtn.classList.remove('error');
-        btnLabel.textContent = 'Submit';
+      const skipSerial =
+        noSerial.checked;
 
-        markField(
+      if (!skipSerial && serial.length === 0) {
+
+        failValidation(
           serialInput,
           serialHint,
-          false
+          'Enter your serial number, or tick the box if you cannot find it.',
+          'Serial number is required.'
         );
 
-        markField(
+        return;
+      }
+
+      if (localityValue.length === 0) {
+
+        failValidation(
           locality,
           localityHint,
-          false
+          r.field === 'town'
+            ? 'Enter the site town or city.'
+            : 'Enter the site postcode.',
+          r.field === 'town'
+            ? 'Town or city is required.'
+            : 'Postcode is required.'
         );
 
-        setStatus('');
+        return;
       }
 
-      function failValidation(
-        input,
-        hint,
-        message,
-        hintMessage
-      ) {
+      if (!isValidLocality(localityValue)) {
 
-        clearTimeout(errorTimer);
-
-        markField(
-          input,
-          hint,
-          true,
-          hintMessage
+        failValidation(
+          locality,
+          localityHint,
+          r.error,
+          r.error
         );
 
-        setStatus(message);
-
-        submitBtn.classList.remove('error');
-
-        void submitBtn.offsetWidth;
-
-        submitBtn.classList.add('error');
-
-        btnLabel.textContent =
-          'Check the highlighted field';
-
-        errorTimer = setTimeout(function () {
-
-          submitBtn.classList.remove('error');
-
-          btnLabel.textContent = 'Submit';
-
-        }, ERROR_RESET_MS);
-
-        input.focus();
+        return;
       }
 
-      function applyCountry() {
+      /*
+       * THIS IS THE IMPORTANT PART.
+       *
+       * This matches the working custom component exactly:
+       *
+       * parent.window.postMessage(
+       *   'widget-message:' + message,
+       *   '*'
+       * );
+       */
 
-        const r = rules();
+      const localityKey =
+        r.field === 'town'
+          ? 'Town'
+          : 'Post Code';
 
-        localityLabel.textContent = r.label;
+      const serialValue =
+        skipSerial
+          ? 'Not known'
+          : serial;
 
-        localityHint.dataset.default = r.hint;
-        localityHint.textContent = r.hint;
+      const message =
+        `Serial Number: ${serialValue}, ${localityKey}: ${localityValue}`;
 
-        locality.placeholder = r.placeholder;
+      try {
 
-        locality.maxLength = r.maxLength;
-
-        locality.value = '';
-
-        locality.setAttribute(
-          'inputmode',
-          r.digitsOnly ? 'numeric' : 'text'
+        parent.window.postMessage(
+          'widget-message:' + message,
+          '*'
         );
 
-        locality.setAttribute(
-          'autocomplete',
-          r.digitsOnly
-            ? 'postal-code'
-            : 'address-level2'
+        lock();
+
+      } catch (err) {
+
+        console.error(err);
+
+        setStatus(
+          'Unable to connect to chat widget.'
         );
-
-        clearErrors();
       }
 
-      // Serial input formatting
-      serialInput.addEventListener(
-        'input',
-        function () {
+    }
+  );
 
-          this.value = this.value
-            .replace(/[^a-zA-Z0-9]/g, '')
-            .toUpperCase()
-            .slice(0, MAX_SERIAL_LENGTH);
+  applyCountry();
 
-          clearErrors();
-        }
-      );
-
-      // Locality input formatting
-      locality.addEventListener(
-        'input',
-        function () {
-
-          const r = rules();
-
-          if (r.digitsOnly) {
-
-            this.value = this.value
-              .replace(/\D/g, '')
-              .slice(0, r.maxLength);
-
-          } else {
-
-            this.value = this.value
-              .replace(/[^a-zA-Z\s'.-]/g, '')
-              .slice(0, r.maxLength);
-          }
-
-          clearErrors();
-        }
-      );
-
-      countrySelect.addEventListener(
-        'change',
-        applyCountry
-      );
-
-      noSerial.addEventListener(
-        'change',
-        function () {
-
-          serialInput.disabled = this.checked;
-
-          if (this.checked) {
-            serialInput.value = '';
-          }
-
-          clearErrors();
-        }
-      );
-
-      function isValidLocality(value) {
-
-        const r = rules();
-
-        if (r.field === 'town') {
-
-          return value
-            .replace(/[^a-zA-Z]/g, '')
-            .length >= 2;
-        }
-
-        if (!r.pattern.test(value)) {
-          return false;
-        }
-
-        const n = parseInt(value, 10);
-
-        return r.ranges.some(function (range) {
-          return n >= range[0] && n <= range[1];
-        });
-      }
-
-      function lock() {
-
-        locked = true;
-
-        serialInput.disabled = true;
-        locality.disabled = true;
-        countrySelect.disabled = true;
-        noSerial.disabled = true;
-        submitBtn.disabled = true;
-
-        submitBtn.classList.remove('error');
-        submitBtn.classList.add('submitted');
-
-        btnLabel.textContent = 'Details sent';
-      }
-
-      form.addEventListener(
-        'submit',
-        function (e) {
-
-          e.preventDefault();
-
-          if (locked) {
-            return;
-          }
-
-          const r = rules();
-
-          const serial =
-            serialInput.value.trim();
-
-          const localityValue =
-            locality.value.trim();
-
-          const skipSerial =
-            noSerial.checked;
-
-          if (!skipSerial && serial.length === 0) {
-
-            failValidation(
-              serialInput,
-              serialHint,
-              'Enter your serial number, or tick the box if you cannot find it.',
-              'Serial number is required.'
-            );
-
-            return;
-          }
-
-          if (localityValue.length === 0) {
-
-            failValidation(
-              locality,
-              localityHint,
-              r.field === 'town'
-                ? 'Enter the site town or city.'
-                : 'Enter the site postcode.',
-              r.field === 'town'
-                ? 'Town or city is required.'
-                : 'Postcode is required.'
-            );
-
-            return;
-          }
-
-          if (!isValidLocality(localityValue)) {
-
-            failValidation(
-              locality,
-              localityHint,
-              r.error,
-              r.error
-            );
-
-            return;
-          }
-
-          const localityKey =
-            r.field === 'town'
-              ? 'Town'
-              : 'Post Code';
-
-          const serialValue =
-            skipSerial
-              ? 'Not known'
-              : serial;
-
-          const message =
-            `Serial Number: ${serialValue}, ${localityKey}: ${localityValue}`;
-
-          try {
-
-            /*
-             * Send the message to the parent Bland widget.
-             *
-             * The "widget-message:" prefix is required by the
-             * existing working custom-component pattern.
-             */
-            const widgetMessage =
-              'widget-message:' + message;
-
-            console.log(
-              'Sending message to Bland:',
-              widgetMessage
-            );
-
-            window.parent.postMessage(
-              widgetMessage,
-              '*'
-            );
-
-            console.log(
-              'Message sent to Bland successfully'
-            );
-
-            lock();
-
-          } catch (err) {
-
-            console.error(
-              'Unable to send message to Bland:',
-              err
-            );
-
-            setStatus(
-              'Unable to connect to chat widget.'
-            );
-          }
-
-        }
-      );
-
-      applyCountry();
-
-    })();
-  </script>
+})();
+</script>
 
 </body>
 </html>
