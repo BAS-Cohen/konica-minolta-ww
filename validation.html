@@ -17,7 +17,7 @@
       color: #1a1a2e;
       margin-bottom: 12px;
     }
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 10px; }
     label {
       display: block;
       font-size: 12px;
@@ -27,34 +27,34 @@
     }
     input[type="text"], select {
       width: 100%;
-      padding: 10px 14px;
+      padding: 10px 12px;
       background: white;
-      color: #1a1a2e;
+      color: #111827;
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
-      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
     }
     select {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
+      background-position: right 12px center;
+      padding-right: 34px;
       cursor: pointer;
     }
     input[type="text"]:focus, select:focus {
       outline: none;
-      border-color: #0067b1;
-      box-shadow: 0 0 0 3px rgba(0, 103, 177, 0.1);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
     input[type="text"].invalid, select.invalid {
       border-color: #dc2626;
       box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
     }
     input[type="text"]:disabled, select:disabled {
-      opacity: 0.5;
+      opacity: 0.55;
       cursor: not-allowed;
       background: #f9fafb;
     }
@@ -73,14 +73,14 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      margin: -4px 0 12px;
+      margin: 0 0 10px;
       font-size: 12px;
       color: #4b5563;
       cursor: pointer;
     }
     .unknown input {
       margin-top: 1px;
-      accent-color: #0067b1;
+      accent-color: #1a3a5c;
       cursor: pointer;
     }
 
@@ -91,64 +91,55 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 10px 14px;
-      background: white;
-      color: #1a1a2e;
-      border: 1px solid #d1d5db;
+      padding: 11px 14px;
+      background: #1a3a5c;
+      color: #ffffff;
+      border: 1px solid #1a3a5c;
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      text-align: left;
+      margin-top: 4px;
       transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
     }
     .submit-btn:hover:not(:disabled):not(.error) {
-      border-color: #0067b1;
-      background: #f0f5fa;
+      background: #254d73;
+      border-color: #254d73;
     }
     .submit-btn:focus-visible {
       outline: none;
-      border-color: #0067b1;
-      box-shadow: 0 0 0 3px rgba(0, 103, 177, 0.15);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
     }
 
     .submit-btn.error {
-      border-color: #dc2626;
       background: #fef2f2;
+      border-color: #dc2626;
       color: #b91c1c;
       animation: shake 0.4s ease;
     }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-5px); }
-      40% { transform: translateX(5px); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
       60% { transform: translateX(-3px); }
       80% { transform: translateX(3px); }
     }
 
-    .submit-btn.sending {
-      cursor: progress;
-      color: #6b7280;
-      border-color: #d1d5db;
-      background: #f9fafb;
-    }
-
     .submit-btn.submitted {
-      background: #0067b1;
-      border-color: #0067b1;
+      background: #1a3a5c;
+      border-color: #1a3a5c;
       color: #ffffff;
       cursor: default;
+      opacity: 1;
       animation: settle 0.45s ease;
     }
     @keyframes settle {
-      0% { box-shadow: 0 0 0 0 rgba(0, 103, 177, 0.35); }
-      100% { box-shadow: 0 0 0 10px rgba(0, 103, 177, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.35); }
+      100% { box-shadow: 0 0 0 10px rgba(26, 58, 92, 0); }
     }
     .submit-btn:disabled { opacity: 1; }
-    .submit-btn.sending:disabled { opacity: 0.75; }
 
-    /* tick icon */
     .tick {
       flex: 0 0 auto;
       width: 16px;
@@ -165,34 +156,19 @@
       fill: none;
       stroke-dasharray: 22;
       stroke-dashoffset: 22;
-      transition: stroke-dashoffset 0.35s ease 0.1s;
+      transition: stroke-dashoffset 0.35s ease 0.05s;
     }
     .submit-btn.submitted .tick { opacity: 1; transform: scale(1); }
     .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
 
-    /* spinner */
-    .spinner {
-      flex: 0 0 auto;
-      width: 14px;
-      height: 14px;
-      border: 2px solid #d1d5db;
-      border-top-color: #0067b1;
-      border-radius: 50%;
-      display: none;
-      animation: spin 0.7s linear infinite;
-    }
-    .submit-btn.sending .spinner { display: block; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
     .status {
-      margin-top: 10px;
+      margin-top: 8px;
       font-size: 12px;
       padding: 8px 12px;
       border-radius: 6px;
       display: none;
     }
     .status.show { display: block; }
-    .status.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
     .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 
     @media (prefers-reduced-motion: reduce) {
@@ -204,11 +180,11 @@
   </style>
 </head>
 <body>
-  <div class="heading">Look up your device</div>
+  <p class="heading">Look up your device:</p>
 
   <form id="lookupForm" novalidate>
     <div class="form-group">
-      <label for="serial">Device Serial Number:</label>
+      <label for="serial">Serial Number</label>
       <input type="text" id="serial" inputmode="text" autocomplete="off" spellcheck="false" placeholder="SA1234567890" maxlength="15" aria-describedby="serialHint">
       <div class="hint" id="serialHint" data-default="Up to 15 characters. Hardware serials start with SA.">Up to 15 characters. Hardware serials start with SA.</div>
     </div>
@@ -219,7 +195,7 @@
     </label>
 
     <div class="form-group">
-      <label for="country">Country:</label>
+      <label for="country">Country</label>
       <select id="country">
         <option value="AU" selected>Australia</option>
         <option value="NZ">New Zealand</option>
@@ -229,14 +205,13 @@
     </div>
 
     <div class="form-group">
-      <label for="locality" id="localityLabel">Site Postcode:</label>
+      <label for="locality" id="localityLabel">Post Code</label>
       <input type="text" id="locality" inputmode="numeric" autocomplete="postal-code" placeholder="2113" maxlength="4" aria-describedby="localityHint">
       <div class="hint" id="localityHint">The postcode where the device is installed.</div>
     </div>
 
     <button type="submit" class="submit-btn" id="submitBtn">
       <span id="btnLabel">Submit</span>
-      <span class="spinner" aria-hidden="true"></span>
       <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5 8 14.5 16 5.5"/></svg>
     </button>
   </form>
@@ -246,7 +221,6 @@
     (function () {
       const MAX_SERIAL_LENGTH = 15;
       const ERROR_RESET_MS = 2000;
-      const SENDING_MS = 400;
 
       // Per country rules. To add a country, add an entry here and a matching
       // <option> above. Keys must match the option values.
@@ -254,7 +228,7 @@
         AU: {
           name: 'Australia',
           field: 'postcode',
-          label: 'Site Postcode:',
+          label: 'Post Code',
           hint: 'The postcode where the device is installed.',
           placeholder: '2113',
           maxLength: 4,
@@ -282,7 +256,7 @@
         NZ: {
           name: 'New Zealand',
           field: 'postcode',
-          label: 'Site Postcode:',
+          label: 'Post Code',
           hint: 'The four digit postcode where the device is installed.',
           placeholder: '1010',
           maxLength: 4,
@@ -304,7 +278,7 @@
         PG: {
           name: 'Papua New Guinea',
           field: 'postcode',
-          label: 'Site Postcode:',
+          label: 'Post Code',
           hint: 'Papua New Guinea postcodes are three digits, for example 121 for Port Moresby.',
           placeholder: '121',
           maxLength: 3,
@@ -316,7 +290,7 @@
         FJ: {
           name: 'Fiji',
           field: 'town',
-          label: 'Site Town or City:',
+          label: 'Town or City',
           hint: 'Fiji does not use postcodes. Enter the town or city where the device is installed.',
           placeholder: 'Suva',
           maxLength: 40,
@@ -344,10 +318,10 @@
         return COUNTRIES[countrySelect.value];
       }
 
-      function setStatus(message, type) {
+      function setStatus(message) {
         status.textContent = message || '';
-        status.classList.remove('error', 'success', 'show');
-        if (type) { status.classList.add(type, 'show'); }
+        status.classList.toggle('show', Boolean(message));
+        status.classList.toggle('error', Boolean(message));
       }
 
       function markField(input, hint, bad, message) {
@@ -369,13 +343,13 @@
         btnLabel.textContent = 'Submit';
         markField(serialInput, serialHint, false);
         markField(locality, localityHint, false);
-        setStatus('', null);
+        setStatus('');
       }
 
       function failValidation(input, hint, message, hintMessage) {
         clearTimeout(errorTimer);
         markField(input, hint, true, hintMessage);
-        setStatus(message, 'error');
+        setStatus(message);
 
         // restart the shake even on repeat clicks
         submitBtn.classList.remove('error');
@@ -450,30 +424,9 @@
         countrySelect.disabled = true;
         noSerial.disabled = true;
         submitBtn.disabled = true;
-      }
-
-      function send(payload) {
-        submitBtn.classList.add('sending');
-        submitBtn.disabled = true;
-        btnLabel.textContent = 'Sending';
-
-        setTimeout(function () {
-          try {
-            parent.window.postMessage('widget-message:' + payload, '*');
-            lock();
-            submitBtn.classList.remove('sending');
-            submitBtn.classList.add('submitted');
-            btnLabel.textContent = 'Details sent';
-            setStatus('Got it!', 'success');
-          } catch (err) {
-            console.error(err);
-            submitBtn.classList.remove('sending');
-            submitBtn.disabled = false;
-            btnLabel.textContent = 'Try again';
-            submitBtn.classList.add('error');
-            setStatus('Unable to connect to chat widget.', 'error');
-          }
-        }, SENDING_MS);
+        submitBtn.classList.remove('error');
+        submitBtn.classList.add('submitted');
+        btnLabel.textContent = 'Details sent';
       }
 
       form.addEventListener('submit', function (e) {
@@ -510,17 +463,20 @@
           return;
         }
 
-        // This string becomes the user's visible message in the chat, the same
-        // way a data-value option button does, so it reads as a sentence.
-        const localityPart = r.field === 'town'
-          ? 'My site is in ' + localityValue + ', ' + r.name + '.'
-          : 'My site postcode is ' + localityValue + ' in ' + r.name + '.';
+        // This string becomes the user's message in the chat.
+        const serialLine = 'Serial Number: ' + (skipSerial ? 'Not known' : serial);
+        const localityLine = (r.field === 'town' ? 'Town: ' : 'Post Code: ') + localityValue;
+        const message = serialLine + '\n' + localityLine;
 
-        const payload = skipSerial
-          ? 'I do not know my serial number. ' + localityPart
-          : 'My serial number is ' + serial + '. ' + localityPart;
-
-        send(payload);
+        // Posted synchronously inside the submit handler, same as the
+        // option buttons. Do not wrap this in a timer.
+        try {
+          parent.window.postMessage('widget-message:' + message, '*');
+          lock();
+        } catch (err) {
+          console.error(err);
+          setStatus('Unable to connect to chat widget.');
+        }
       });
 
       applyCountry();
