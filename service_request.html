@@ -10,79 +10,65 @@
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: transparent;
-      padding: 12px 16px;
+      padding: 10px 14px;
       color: #1a1a2e;
     }
 
     .heading {
       font-size: 14px;
       font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 4px;
+      margin-bottom: 10px;
     }
 
-    .sub {
-      font-size: 12px;
-      color: #6b7280;
-      margin-bottom: 12px;
-    }
+    .form-group { margin-bottom: 8px; }
 
-    .section-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #8a99a8;
-      margin: 14px 0 8px;
-      padding-top: 10px;
-      border-top: 1px solid #e6ebf1;
-    }
-
-    .form-group { margin-bottom: 10px; }
-
-    /* paired rows that stack when the panel is narrow */
     .row {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
     }
 
     .row .form-group {
-      flex: 1 1 150px;
-      min-width: 140px;
+      flex: 1 1 140px;
+      min-width: 128px;
     }
+
+    .row .wide { flex: 1.7 1 170px; }
 
     label {
       display: block;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 500;
       color: #4b5563;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .optional { font-weight: 400; color: #9aa9b8; }
 
     input[type="text"], select, textarea {
       width: 100%;
-      padding: 10px 12px;
+      padding: 8px 10px;
       background: #ffffff;
       color: #111827;
       border: 1px solid #d8dee6;
-      border-radius: 10px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
       font-family: inherit;
-      line-height: 1.4;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      line-height: 1.35;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
     }
 
-    textarea { min-height: 76px; resize: none; }
+    textarea {
+      min-height: 58px;
+      resize: none;
+    }
 
     select {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 10px center;
-      padding-right: 30px;
+      background-position: right 9px center;
+      padding-right: 26px;
       cursor: pointer;
     }
 
@@ -107,44 +93,37 @@
 
     input::placeholder, textarea::placeholder { color: #9ca3af; }
 
-    /* phone with inline country code */
-    .phone-line { display: flex; gap: 6px; }
-    .phone-line .cc { flex: 0 0 64px; text-align: center; padding-left: 6px; padding-right: 6px; }
+    .phone-line { display: flex; gap: 5px; }
+    .phone-line .cc {
+      flex: 0 0 54px;
+      text-align: center;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
     .phone-line .num { flex: 1 1 auto; min-width: 0; }
 
-    .hint {
-      margin-top: 4px;
-      font-size: 11px;
-      color: #6b7280;
-      transition: color 0.15s ease;
-    }
-
-    .hint.invalid { color: #dc2626; }
-
     .counter {
-      margin-top: 4px;
-      font-size: 11px;
-      color: #6b7280;
+      margin-top: 3px;
+      font-size: 10.5px;
+      color: #9aa9b8;
       text-align: right;
     }
 
     .counter.limit { color: #b45309; }
 
-    /* ---------- submit ---------- */
-
     .submit-btn {
       width: 100%;
-      margin-top: 10px;
+      margin-top: 4px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 11px 14px;
+      padding: 10px 13px;
       background: linear-gradient(135deg, #1a3a5c 0%, #27547e 100%);
       color: #ffffff;
       border: 1px solid #1a3a5c;
-      border-radius: 10px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
       font-family: inherit;
       font-weight: 600;
       cursor: pointer;
@@ -192,8 +171,8 @@
 
     .tick {
       flex: 0 0 auto;
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       opacity: 0;
       transform: scale(0.8);
       transition: opacity 0.15s ease, transform 0.2s ease;
@@ -214,10 +193,10 @@
     .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
 
     .status {
-      margin-top: 8px;
-      font-size: 12px;
-      padding: 8px 12px;
-      border-radius: 8px;
+      margin-top: 7px;
+      font-size: 11.5px;
+      padding: 7px 10px;
+      border-radius: 7px;
       display: none;
     }
 
@@ -235,7 +214,6 @@
 <body>
 
   <p class="heading">Create a service request</p>
-  <p class="sub">We will use these details to raise the request and contact you about it.</p>
 
   <form id="serviceForm" novalidate>
 
@@ -243,7 +221,6 @@
       <div class="form-group">
         <label for="contactName">Contact Name</label>
         <input type="text" id="contactName" placeholder="Jane Smith" maxlength="80" autocomplete="name">
-        <div class="hint" id="contactNameHint" data-default="Who we should contact.">Who we should contact.</div>
       </div>
 
       <div class="form-group">
@@ -252,41 +229,35 @@
           <input type="text" id="countryCode" class="cc" value="+61" maxlength="5" inputmode="tel" aria-label="Country code">
           <input type="text" id="contactPhone" class="num" placeholder="2 9123 4567" maxlength="20" autocomplete="tel" inputmode="tel">
         </div>
-        <div class="hint" id="contactPhoneHint" data-default="Drop the leading zero after the country code.">Drop the leading zero after the country code.</div>
       </div>
     </div>
 
     <div class="form-group">
       <label for="contactEmail">Contact Email</label>
       <input type="text" id="contactEmail" placeholder="jane.smith@company.com.au" maxlength="120" autocomplete="email" inputmode="email" spellcheck="false">
-      <div class="hint" id="contactEmailHint" data-default="We will send the request reference here.">We will send the request reference here.</div>
     </div>
 
-    <p class="section-label">Site address</p>
+    <div class="row">
+      <div class="form-group wide">
+        <label for="street">Street Address</label>
+        <input type="text" id="street" placeholder="4 Nexus Court" maxlength="120" autocomplete="address-line1">
+      </div>
 
-    <div class="form-group">
-      <label for="street">Street Address</label>
-      <input type="text" id="street" placeholder="4 Nexus Court" maxlength="120" autocomplete="address-line1">
-      <div class="hint" id="streetHint" data-default="Street number and name.">Street number and name.</div>
-    </div>
-
-    <div class="form-group">
-      <label for="street2">Unit, Level or Building <span class="optional">(optional)</span></label>
-      <input type="text" id="street2" placeholder="Level 2" maxlength="80" autocomplete="address-line2">
-      <div class="hint" id="street2Hint" data-default="Helps the technician find the device on site.">Helps the technician find the device on site.</div>
+      <div class="form-group">
+        <label for="street2">Unit or Level <span class="optional">(opt)</span></label>
+        <input type="text" id="street2" placeholder="Level 2" maxlength="80" autocomplete="address-line2">
+      </div>
     </div>
 
     <div class="row">
       <div class="form-group">
         <label for="suburb">Suburb or City</label>
         <input type="text" id="suburb" placeholder="Mulgrave" maxlength="60" autocomplete="address-level2">
-        <div class="hint" id="suburbHint" data-default="&nbsp;">&nbsp;</div>
       </div>
 
       <div class="form-group">
         <label for="region">State or Region</label>
         <input type="text" id="region" placeholder="VIC" maxlength="40" autocomplete="address-level1">
-        <div class="hint" id="regionHint" data-default="&nbsp;">&nbsp;</div>
       </div>
     </div>
 
@@ -294,7 +265,6 @@
       <div class="form-group">
         <label for="postcode" id="postcodeLabel">Postcode</label>
         <input type="text" id="postcode" placeholder="3170" maxlength="4" autocomplete="postal-code" inputmode="numeric">
-        <div class="hint" id="postcodeHint" data-default="&nbsp;">&nbsp;</div>
       </div>
 
       <div class="form-group">
@@ -305,38 +275,34 @@
           <option value="Papua New Guinea">Papua New Guinea</option>
           <option value="Fiji">Fiji</option>
         </select>
-        <div class="hint" id="countryHint" data-default="&nbsp;">&nbsp;</div>
       </div>
     </div>
 
-    <p class="section-label">Request details</p>
+    <div class="row">
+      <div class="form-group wide">
+        <label for="serviceType">Service Type</label>
+        <select id="serviceType" class="placeholder">
+          <option value="" selected disabled>Select a service type</option>
+          <option value="Corrective Maintenance">Corrective Maintenance</option>
+          <option value="Preventive Maintenance">Preventive Maintenance</option>
+          <option value="Courtesy Visit">Courtesy Visit</option>
+          <option value="Software Support">Software Support</option>
+          <option value="Hardware Support">Hardware Support</option>
+          <option value="General / Uncertain">General / Uncertain</option>
+          <option value="Helpdesk">Helpdesk</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <label for="poNumber">Purchase Order Number <span class="optional">(optional)</span></label>
-      <input type="text" id="poNumber" placeholder="PO-004821" maxlength="40" autocomplete="off" spellcheck="false">
-      <div class="hint" id="poNumberHint" data-default="Only if your organisation requires one on the job.">Only if your organisation requires one on the job.</div>
-    </div>
-
-    <div class="form-group">
-      <label for="serviceType">Service Type</label>
-      <select id="serviceType" class="placeholder">
-        <option value="" selected disabled>Select a service type</option>
-        <option value="Corrective Maintenance">Corrective Maintenance</option>
-        <option value="Preventive Maintenance">Preventive Maintenance</option>
-        <option value="Courtesy Visit">Courtesy Visit</option>
-        <option value="Software Support">Software Support</option>
-        <option value="Hardware Support">Hardware Support</option>
-        <option value="General / Uncertain">General / Uncertain</option>
-        <option value="Helpdesk">Helpdesk</option>
-      </select>
-      <div class="hint" id="serviceTypeHint" data-default="Choose General / Uncertain if you are not sure.">Choose General / Uncertain if you are not sure.</div>
+      <div class="form-group">
+        <label for="poNumber">PO Number <span class="optional">(opt)</span></label>
+        <input type="text" id="poNumber" placeholder="PO-004821" maxlength="40" autocomplete="off" spellcheck="false">
+      </div>
     </div>
 
     <div class="form-group">
       <label for="description">Description of the Issue</label>
-      <textarea id="description" placeholder="Describe the fault, any error codes on the panel, and when it started." maxlength="500"></textarea>
+      <textarea id="description" placeholder="Describe the fault, any error codes, and when it started." maxlength="500"></textarea>
       <div class="counter" id="counter">0 / 500</div>
-      <div class="hint" id="descriptionHint" data-default="Error codes and what you were doing at the time help the technician.">Error codes and what you were doing at the time help the technician.</div>
     </div>
 
     <button type="submit" class="submit-btn" id="submitBtn">
@@ -393,22 +359,6 @@
         description: document.getElementById('description')
       };
 
-      const hints = {
-        contactName: document.getElementById('contactNameHint'),
-        countryCode: document.getElementById('contactPhoneHint'),
-        contactPhone: document.getElementById('contactPhoneHint'),
-        contactEmail: document.getElementById('contactEmailHint'),
-        street: document.getElementById('streetHint'),
-        street2: document.getElementById('street2Hint'),
-        suburb: document.getElementById('suburbHint'),
-        region: document.getElementById('regionHint'),
-        postcode: document.getElementById('postcodeHint'),
-        country: document.getElementById('countryHint'),
-        poNumber: document.getElementById('poNumberHint'),
-        serviceType: document.getElementById('serviceTypeHint'),
-        description: document.getElementById('descriptionHint')
-      };
-
       let errorTimer = null;
       let locked = false;
 
@@ -429,30 +379,15 @@
           fields[key].setAttribute('aria-invalid', 'false');
         });
 
-        Object.keys(hints).forEach(function (key) {
-          const hint = hints[key];
-          if (hint && hint.classList.contains('invalid')) {
-            hint.classList.remove('invalid');
-            hint.innerHTML = hint.dataset.default;
-          }
-        });
-
         setStatus('');
       }
 
-      function fail(key, message, hintMessage) {
+      function fail(key, message) {
         clearTimeout(errorTimer);
 
         const field = fields[key];
-        const hint = hints[key];
-
         field.classList.add('invalid');
         field.setAttribute('aria-invalid', 'true');
-
-        if (hint) {
-          hint.classList.add('invalid');
-          hint.textContent = hintMessage || message;
-        }
 
         setStatus(message);
 
@@ -476,7 +411,7 @@
         fields.countryCode.value = COUNTRY_CODES[country];
 
         if (len === 0) {
-          postcodeLabel.innerHTML = 'Postcode <span class="optional">(not used)</span>';
+          postcodeLabel.innerHTML = 'Postcode <span class="optional">(n/a)</span>';
           fields.postcode.value = '';
           fields.postcode.placeholder = 'n/a';
           fields.postcode.maxLength = 4;
@@ -572,53 +507,53 @@
         const needsPostcode = POSTCODE_LENGTH[country] > 0;
 
         if (name.replace(/[^a-zA-Z]/g, '').length < 2) {
-          fail('contactName', 'Enter the contact name for this request.', 'Contact name is required.');
+          fail('contactName', 'Enter the contact name for this request.');
           return;
         }
 
         if (!/^\+\d{1,4}$/.test(cc)) {
-          fail('countryCode', 'Enter a country code, for example +61.', 'Country code is required.');
+          fail('countryCode', 'Enter a country code, for example +61.');
           return;
         }
 
         const digits = phone.replace(/\D/g, '');
         if (digits.length < 7 || digits.length > 12) {
-          fail('contactPhone', 'Enter a contact phone number we can reach you on.', 'Enter a valid phone number without the country code.');
+          fail('contactPhone', 'Enter a valid contact phone number, without the country code.');
           return;
         }
 
         if (!validEmail(email)) {
-          fail('contactEmail', 'Enter a valid email address.', 'That does not look like a valid email address.');
+          fail('contactEmail', 'Enter a valid email address.');
           return;
         }
 
         if (street.length < 3) {
-          fail('street', 'Enter the street address of the site.', 'Street address is required.');
+          fail('street', 'Enter the street address of the site.');
           return;
         }
 
         if (suburb.replace(/[^a-zA-Z]/g, '').length < 2) {
-          fail('suburb', 'Enter the suburb or city.', 'Suburb or city is required.');
+          fail('suburb', 'Enter the suburb or city.');
           return;
         }
 
         if (region.replace(/[^a-zA-Z]/g, '').length < 2) {
-          fail('region', 'Enter the state or region.', 'State or region is required.');
+          fail('region', 'Enter the state or region.');
           return;
         }
 
         if (needsPostcode && postcode.length !== POSTCODE_LENGTH[country]) {
-          fail('postcode', 'Enter the ' + POSTCODE_LENGTH[country] + ' digit postcode for the site.', 'Postcode must be ' + POSTCODE_LENGTH[country] + ' digits.');
+          fail('postcode', 'Enter the ' + POSTCODE_LENGTH[country] + ' digit postcode for the site.');
           return;
         }
 
         if (!type) {
-          fail('serviceType', 'Choose a service type.', 'Select a service type, or General / Uncertain.');
+          fail('serviceType', 'Choose a service type.');
           return;
         }
 
         if (desc.length < 10) {
-          fail('description', 'Describe the issue so the technician knows what to expect.', 'Add a bit more detail about the issue.');
+          fail('description', 'Describe the issue so the technician knows what to expect.');
           return;
         }
 
