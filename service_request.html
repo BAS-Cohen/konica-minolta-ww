@@ -59,7 +59,7 @@
     }
 
     textarea {
-      min-height: 58px;
+      min-height: 62px;
       resize: none;
     }
 
@@ -95,7 +95,7 @@
 
     .phone-line { display: flex; gap: 5px; }
     .phone-line .cc {
-      flex: 0 0 54px;
+      flex: 0 0 58px;
       text-align: center;
       padding-left: 4px;
       padding-right: 4px;
@@ -226,7 +226,7 @@
       <div class="form-group">
         <label for="contactPhone">Contact Phone</label>
         <div class="phone-line">
-          <input type="text" id="countryCode" class="cc" value="+61" maxlength="5" inputmode="tel" aria-label="Country code">
+          <input type="text" id="countryCode" class="cc" value="+61" placeholder="+61" maxlength="5" inputmode="tel" aria-label="Country code">
           <input type="text" id="contactPhone" class="num" placeholder="2 9123 4567" maxlength="20" autocomplete="tel" inputmode="tel">
         </div>
       </div>
@@ -237,66 +237,18 @@
       <input type="text" id="contactEmail" placeholder="jane.smith@company.com.au" maxlength="120" autocomplete="email" inputmode="email" spellcheck="false">
     </div>
 
-    <div class="row">
-      <div class="form-group wide">
-        <label for="street">Street Address</label>
-        <input type="text" id="street" placeholder="4 Nexus Court" maxlength="120" autocomplete="address-line1">
-      </div>
-
-      <div class="form-group">
-        <label for="street2">Unit or Level <span class="optional">(opt)</span></label>
-        <input type="text" id="street2" placeholder="Level 2" maxlength="80" autocomplete="address-line2">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group">
-        <label for="suburb">Suburb or City</label>
-        <input type="text" id="suburb" placeholder="Mulgrave" maxlength="60" autocomplete="address-level2">
-      </div>
-
-      <div class="form-group">
-        <label for="region">State or Region</label>
-        <input type="text" id="region" placeholder="VIC" maxlength="40" autocomplete="address-level1">
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group">
-        <label for="postcode" id="postcodeLabel">Postcode</label>
-        <input type="text" id="postcode" placeholder="3170" maxlength="4" autocomplete="postal-code" inputmode="numeric">
-      </div>
-
-      <div class="form-group">
-        <label for="country">Country</label>
-        <select id="country">
-          <option value="Australia" selected>Australia</option>
-          <option value="New Zealand">New Zealand</option>
-          <option value="Papua New Guinea">Papua New Guinea</option>
-          <option value="Fiji">Fiji</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="form-group wide">
-        <label for="serviceType">Service Type</label>
-        <select id="serviceType" class="placeholder">
-          <option value="" selected disabled>Select a service type</option>
-          <option value="Corrective Maintenance">Corrective Maintenance</option>
-          <option value="Preventive Maintenance">Preventive Maintenance</option>
-          <option value="Courtesy Visit">Courtesy Visit</option>
-          <option value="Software Support">Software Support</option>
-          <option value="Hardware Support">Hardware Support</option>
-          <option value="General / Uncertain">General / Uncertain</option>
-          <option value="Helpdesk">Helpdesk</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="poNumber">PO Number <span class="optional">(opt)</span></label>
-        <input type="text" id="poNumber" placeholder="PO-004821" maxlength="40" autocomplete="off" spellcheck="false">
-      </div>
+    <div class="form-group">
+      <label for="serviceType">Service Type</label>
+      <select id="serviceType" class="placeholder">
+        <option value="" selected disabled>Select a service type</option>
+        <option value="Corrective Maintenance">Corrective Maintenance</option>
+        <option value="Preventive Maintenance">Preventive Maintenance</option>
+        <option value="Courtesy Visit">Courtesy Visit</option>
+        <option value="Software Support">Software Support</option>
+        <option value="Hardware Support">Hardware Support</option>
+        <option value="General / Uncertain">General / Uncertain</option>
+        <option value="Helpdesk">Helpdesk</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -322,39 +274,17 @@
       const ERROR_RESET_MS = 2000;
       const MAX_DESC = 500;
 
-      const COUNTRY_CODES = {
-        'Australia': '+61',
-        'New Zealand': '+64',
-        'Papua New Guinea': '+675',
-        'Fiji': '+679'
-      };
-
-      const POSTCODE_LENGTH = {
-        'Australia': 4,
-        'New Zealand': 4,
-        'Papua New Guinea': 3,
-        'Fiji': 0
-      };
-
       const form = document.getElementById('serviceForm');
       const submitBtn = document.getElementById('submitBtn');
       const btnLabel = document.getElementById('btnLabel');
       const status = document.getElementById('status');
       const counter = document.getElementById('counter');
-      const postcodeLabel = document.getElementById('postcodeLabel');
 
       const fields = {
         contactName: document.getElementById('contactName'),
         countryCode: document.getElementById('countryCode'),
         contactPhone: document.getElementById('contactPhone'),
         contactEmail: document.getElementById('contactEmail'),
-        street: document.getElementById('street'),
-        street2: document.getElementById('street2'),
-        suburb: document.getElementById('suburb'),
-        region: document.getElementById('region'),
-        postcode: document.getElementById('postcode'),
-        country: document.getElementById('country'),
-        poNumber: document.getElementById('poNumber'),
         serviceType: document.getElementById('serviceType'),
         description: document.getElementById('description')
       };
@@ -404,39 +334,20 @@
         field.focus();
       }
 
-      function applyCountry() {
-        const country = fields.country.value;
-        const len = POSTCODE_LENGTH[country];
-
-        fields.countryCode.value = COUNTRY_CODES[country];
-
-        if (len === 0) {
-          postcodeLabel.innerHTML = 'Postcode <span class="optional">(n/a)</span>';
-          fields.postcode.value = '';
-          fields.postcode.placeholder = 'n/a';
-          fields.postcode.maxLength = 4;
-        } else {
-          postcodeLabel.textContent = 'Postcode';
-          fields.postcode.maxLength = len;
-          fields.postcode.placeholder = len === 3 ? '121' : (country === 'New Zealand' ? '1010' : '3170');
-          if (fields.postcode.value.length > len) {
-            fields.postcode.value = fields.postcode.value.slice(0, len);
-          }
-        }
-
-        clearErrors();
-      }
-
       fields.contactName.addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-Z\s'.-]/g, '');
         clearErrors();
       });
 
+      // Country code: free entry, always leads with a plus.
       fields.countryCode.addEventListener('input', function () {
-        let v = this.value.replace(/[^0-9+]/g, '');
-        if (v.length && v.charAt(0) !== '+') { v = '+' + v.replace(/\+/g, ''); }
-        this.value = v.slice(0, 5);
+        let v = this.value.replace(/[^0-9+]/g, '').replace(/\+/g, '');
+        this.value = v.length ? '+' + v.slice(0, 4) : '+';
         clearErrors();
+      });
+
+      fields.countryCode.addEventListener('focus', function () {
+        if (!this.value) { this.value = '+'; }
       });
 
       fields.contactPhone.addEventListener('input', function () {
@@ -449,21 +360,9 @@
         clearErrors();
       });
 
-      fields.postcode.addEventListener('input', function () {
-        const len = POSTCODE_LENGTH[fields.country.value] || 4;
-        this.value = this.value.replace(/\D/g, '').slice(0, len);
-        clearErrors();
-      });
-
-      fields.country.addEventListener('change', applyCountry);
-
       fields.serviceType.addEventListener('change', function () {
         this.classList.remove('placeholder');
         clearErrors();
-      });
-
-      ['street', 'street2', 'suburb', 'region', 'poNumber'].forEach(function (key) {
-        fields[key].addEventListener('input', clearErrors);
       });
 
       fields.description.addEventListener('input', function () {
@@ -494,17 +393,8 @@
         const cc = fields.countryCode.value.trim();
         const phone = fields.contactPhone.value.trim();
         const email = fields.contactEmail.value.trim();
-        const street = fields.street.value.trim();
-        const street2 = fields.street2.value.trim();
-        const suburb = fields.suburb.value.trim();
-        const region = fields.region.value.trim();
-        const postcode = fields.postcode.value.trim();
-        const country = fields.country.value;
-        const po = fields.poNumber.value.trim();
         const type = fields.serviceType.value;
         const desc = fields.description.value.trim();
-
-        const needsPostcode = POSTCODE_LENGTH[country] > 0;
 
         if (name.replace(/[^a-zA-Z]/g, '').length < 2) {
           fail('contactName', 'Enter the contact name for this request.');
@@ -527,26 +417,6 @@
           return;
         }
 
-        if (street.length < 3) {
-          fail('street', 'Enter the street address of the site.');
-          return;
-        }
-
-        if (suburb.replace(/[^a-zA-Z]/g, '').length < 2) {
-          fail('suburb', 'Enter the suburb or city.');
-          return;
-        }
-
-        if (region.replace(/[^a-zA-Z]/g, '').length < 2) {
-          fail('region', 'Enter the state or region.');
-          return;
-        }
-
-        if (needsPostcode && postcode.length !== POSTCODE_LENGTH[country]) {
-          fail('postcode', 'Enter the ' + POSTCODE_LENGTH[country] + ' digit postcode for the site.');
-          return;
-        }
-
         if (!type) {
           fail('serviceType', 'Choose a service type.');
           return;
@@ -563,13 +433,6 @@
           'Contact Name: ' + name +
           ', Contact Phone: ' + cc + ' ' + phone +
           ', Contact Email: ' + email +
-          ', Street Address: ' + flat(street) +
-          ', Unit or Level: ' + (street2 ? flat(street2) : 'Not provided') +
-          ', Suburb: ' + suburb +
-          ', State or Region: ' + region +
-          ', Postcode: ' + (needsPostcode ? postcode : 'Not applicable') +
-          ', Country: ' + country +
-          ', Purchase Order Number: ' + (po ? po : 'Not provided') +
           ', Service Type: ' + type +
           ', Description: ' + flat(desc);
 
@@ -581,8 +444,6 @@
           setStatus('Unable to connect to chat widget.');
         }
       });
-
-      applyCountry();
     })();
   </script>
 </body>
