@@ -1,34 +1,23 @@
 <!DOCTYPE html>
-<html lang="en-AU">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Device Lookup</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: transparent;
       padding: 12px 16px;
     }
-
     .heading {
       font-size: 14px;
       font-weight: 600;
       color: #1a1a2e;
       margin-bottom: 12px;
     }
-
-    .form-group {
-      margin-bottom: 10px;
-    }
-
+    .form-group { margin-bottom: 10px; }
     label {
       display: block;
       font-size: 12px;
@@ -36,9 +25,7 @@
       color: #4b5563;
       margin-bottom: 4px;
     }
-
-    input[type="text"],
-    select {
+    input[type="text"], select {
       width: 100%;
       padding: 10px 12px;
       background: white;
@@ -49,7 +36,6 @@
       font-family: inherit;
       transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
     }
-
     select {
       appearance: none;
       background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
@@ -58,35 +44,22 @@
       padding-right: 34px;
       cursor: pointer;
     }
-
-    input[type="text"]:focus,
-    select:focus {
+    input[type="text"]:focus, select:focus {
       outline: none;
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
-
-    input[type="text"].invalid,
-    select.invalid {
+    input[type="text"].invalid, select.invalid {
       border-color: #dc2626;
       box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
     }
-
-    input[type="text"]:disabled,
-    select:disabled {
+    input[type="text"]:disabled, select:disabled {
       opacity: 0.55;
       cursor: not-allowed;
       background: #f9fafb;
     }
-
-    input::placeholder {
-      color: #9ca3af;
-    }
-
-    #serial {
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
+    input::placeholder { color: #9ca3af; }
+    #serial { text-transform: uppercase; letter-spacing: 0.04em; }
 
     .hint {
       margin-top: 4px;
@@ -94,10 +67,7 @@
       color: #6b7280;
       transition: color 0.15s;
     }
-
-    .hint.invalid {
-      color: #dc2626;
-    }
+    .hint.invalid { color: #dc2626; }
 
     .unknown {
       display: flex;
@@ -108,14 +78,11 @@
       color: #4b5563;
       cursor: pointer;
     }
-
     .unknown input {
       margin-top: 1px;
       accent-color: #1a3a5c;
       cursor: pointer;
     }
-
-    /* ---------- submit button and its states ---------- */
 
     .submit-btn {
       width: 100%;
@@ -135,24 +102,20 @@
       margin-top: 4px;
       transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
     }
-
     .submit-btn:hover:not(:disabled):not(.error) {
       background: #254d73;
       border-color: #254d73;
     }
-
     .submit-btn:focus-visible {
       outline: none;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
     }
-
     .submit-btn.error {
       background: #fef2f2;
       border-color: #dc2626;
       color: #b91c1c;
       animation: shake 0.4s ease;
     }
-
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-4px); }
@@ -160,7 +123,6 @@
       60% { transform: translateX(-3px); }
       80% { transform: translateX(3px); }
     }
-
     .submit-btn.submitted {
       background: #1a3a5c;
       border-color: #1a3a5c;
@@ -169,20 +131,11 @@
       opacity: 1;
       animation: settle 0.45s ease;
     }
-
     @keyframes settle {
-      0% {
-        box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.35);
-      }
-
-      100% {
-        box-shadow: 0 0 0 10px rgba(26, 58, 92, 0);
-      }
+      0% { box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.35); }
+      100% { box-shadow: 0 0 0 10px rgba(26, 58, 92, 0); }
     }
-
-    .submit-btn:disabled {
-      opacity: 1;
-    }
+    .submit-btn:disabled { opacity: 1; }
 
     .tick {
       flex: 0 0 auto;
@@ -192,7 +145,6 @@
       transform: scale(0.8);
       transition: opacity 0.15s ease, transform 0.2s ease;
     }
-
     .tick path {
       stroke: #ffffff;
       stroke-width: 2.4;
@@ -203,15 +155,8 @@
       stroke-dashoffset: 22;
       transition: stroke-dashoffset 0.35s ease 0.05s;
     }
-
-    .submit-btn.submitted .tick {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .submit-btn.submitted .tick path {
-      stroke-dashoffset: 0;
-    }
+    .submit-btn.submitted .tick { opacity: 1; transform: scale(1); }
+    .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
 
     .status {
       margin-top: 8px;
@@ -220,65 +165,25 @@
       border-radius: 6px;
       display: none;
     }
-
-    .status.show {
-      display: block;
-    }
-
-    .status.error {
-      background: #fef2f2;
-      color: #dc2626;
-      border: 1px solid #fecaca;
-    }
+    .status.show { display: block; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
 
     @media (prefers-reduced-motion: reduce) {
-      * {
-        animation: none !important;
-        transition: none !important;
-      }
-
-      .tick {
-        opacity: 0;
-      }
-
-      .submit-btn.submitted .tick {
-        opacity: 1;
-      }
-
-      .tick path {
-        stroke-dashoffset: 0;
-      }
+      * { animation: none !important; transition: none !important; }
+      .tick { opacity: 0; }
+      .submit-btn.submitted .tick { opacity: 1; }
+      .tick path { stroke-dashoffset: 0; }
     }
   </style>
 </head>
-
 <body>
-
   <p class="heading">Look up your device:</p>
 
   <form id="lookupForm" novalidate>
-
     <div class="form-group">
       <label for="serial">Serial Number</label>
-
-      <input
-        type="text"
-        id="serial"
-        inputmode="text"
-        autocomplete="off"
-        spellcheck="false"
-        placeholder="SA1234567890"
-        maxlength="15"
-        aria-describedby="serialHint"
-      >
-
-      <div
-        class="hint"
-        id="serialHint"
-        data-default="Up to 15 characters. Hardware serials start with SA."
-      >
-        Up to 15 characters. Hardware serials start with SA.
-      </div>
+      <input type="text" id="serial" placeholder="SA1234567890" maxlength="18" autocomplete="off" spellcheck="false">
+      <div class="hint" id="serialHint">Between 10 and 18 characters. Hardware serials start with SA.</div>
     </div>
 
     <label class="unknown" for="noSerial">
@@ -288,7 +193,6 @@
 
     <div class="form-group">
       <label for="country">Country</label>
-
       <select id="country">
         <option value="AU" selected>Australia</option>
         <option value="NZ">New Zealand</option>
@@ -299,470 +203,231 @@
 
     <div class="form-group">
       <label for="locality" id="localityLabel">Post Code</label>
-
-      <input
-        type="text"
-        id="locality"
-        inputmode="numeric"
-        autocomplete="postal-code"
-        placeholder="2113"
-        maxlength="4"
-        aria-describedby="localityHint"
-      >
-
-      <div class="hint" id="localityHint">
-        The postcode where the device is installed.
-      </div>
+      <input type="text" id="locality" placeholder="2113" maxlength="4" autocomplete="postal-code">
+      <div class="hint" id="localityHint">The postcode where the device is installed.</div>
     </div>
 
     <button type="submit" class="submit-btn" id="submitBtn">
-      <span id="btnLabel">Submit</span>
-
-      <svg class="tick" viewBox="0 0 20 20" aria-hidden="true">
-        <path d="M4 10.5 8 14.5 16 5.5"/>
-      </svg>
+      <span id="btnLabel">Submit device details</span>
+      <svg class="tick" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5 8 14.5 16 5.5"/></svg>
     </button>
-
   </form>
-
-  <div
-    id="status"
-    class="status"
-    role="status"
-    aria-live="polite"
-  ></div>
+  <div id="status" class="status"></div>
 
   <script>
-(function () {
+    (function () {
+      const DEFAULT_LABEL = 'Submit device details';
+      const MIN_SERIAL = 10;
+      const MAX_SERIAL = 18;
 
-  const MAX_SERIAL_LENGTH = 15;
-  const ERROR_RESET_MS = 2000;
+      const COUNTRIES = {
+        AU: {
+          name: 'Australia',
+          key: 'Post Code',
+          label: 'Post Code',
+          hint: 'The postcode where the device is installed.',
+          placeholder: '2113',
+          maxLength: 4,
+          digitsOnly: true,
+          pattern: /^\d{4}$/,
+          ranges: [
+            [200, 299], [800, 999], [1000, 2599], [2600, 2618], [2619, 2899],
+            [2900, 2920], [2921, 2999], [3000, 3999], [4000, 4999], [5000, 5999],
+            [6000, 6797], [6800, 6999], [7000, 7999], [8000, 8999], [9000, 9999]
+          ],
+          error: 'Please enter a valid Australian postcode.'
+        },
+        NZ: {
+          name: 'New Zealand',
+          key: 'Post Code',
+          label: 'Post Code',
+          hint: 'The four digit postcode where the device is installed.',
+          placeholder: '1010',
+          maxLength: 4,
+          digitsOnly: true,
+          pattern: /^\d{4}$/,
+          ranges: [
+            [110, 999], [1010, 2999], [3010, 3999], [4110, 4999], [5010, 5999],
+            [6011, 6999], [7010, 7999], [8011, 8999], [9010, 9893]
+          ],
+          error: 'Please enter a valid New Zealand postcode.'
+        },
+        PG: {
+          name: 'Papua New Guinea',
+          key: 'Post Code',
+          label: 'Post Code',
+          hint: 'Papua New Guinea postcodes are three digits, for example 121.',
+          placeholder: '121',
+          maxLength: 3,
+          digitsOnly: true,
+          pattern: /^\d{3}$/,
+          ranges: [[100, 999]],
+          error: 'Please enter a valid Papua New Guinea postcode.'
+        },
+        FJ: {
+          name: 'Fiji',
+          key: 'Town',
+          label: 'Town or City',
+          hint: 'Fiji does not use postcodes. Enter the town or city.',
+          placeholder: 'Suva',
+          maxLength: 40,
+          digitsOnly: false,
+          error: 'Please enter the town or city where the device is installed.'
+        }
+      };
 
-  const COUNTRIES = {
+      const form = document.getElementById('lookupForm');
+      const serialInput = document.getElementById('serial');
+      const serialHint = document.getElementById('serialHint');
+      const noSerial = document.getElementById('noSerial');
+      const countrySelect = document.getElementById('country');
+      const locality = document.getElementById('locality');
+      const localityLabel = document.getElementById('localityLabel');
+      const localityHint = document.getElementById('localityHint');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnLabel = document.getElementById('btnLabel');
+      const status = document.getElementById('status');
 
-    AU: {
-      name: 'Australia',
-      field: 'postcode',
-      label: 'Post Code',
-      hint: 'The postcode where the device is installed.',
-      placeholder: '2113',
-      maxLength: 4,
-      digitsOnly: true,
-      pattern: /^\d{4}$/,
-      ranges: [
-        [200, 299],
-        [800, 999],
-        [1000, 2599],
-        [2600, 2618],
-        [2619, 2899],
-        [2900, 2920],
-        [2921, 2999],
-        [3000, 3999],
-        [4000, 4999],
-        [5000, 5999],
-        [6000, 6797],
-        [6800, 6999],
-        [7000, 7999],
-        [8000, 8999],
-        [9000, 9999]
-      ],
-      error: 'That is not a valid Australian postcode. Enter the four digit postcode for the site.'
-    },
+      let errorTimer = null;
+      let locked = false;
 
-    NZ: {
-      name: 'New Zealand',
-      field: 'postcode',
-      label: 'Post Code',
-      hint: 'The four digit postcode where the device is installed.',
-      placeholder: '1010',
-      maxLength: 4,
-      digitsOnly: true,
-      pattern: /^\d{4}$/,
-      ranges: [
-        [110, 999],
-        [1010, 2999],
-        [3010, 3999],
-        [4110, 4999],
-        [5010, 5999],
-        [6011, 6999],
-        [7010, 7999],
-        [8011, 8999],
-        [9010, 9893]
-      ],
-      error: 'That is not a valid New Zealand postcode. Enter the four digit postcode for the site.'
-    },
-
-    PG: {
-      name: 'Papua New Guinea',
-      field: 'postcode',
-      label: 'Post Code',
-      hint: 'Papua New Guinea postcodes are three digits, for example 121 for Port Moresby.',
-      placeholder: '121',
-      maxLength: 3,
-      digitsOnly: true,
-      pattern: /^\d{3}$/,
-      ranges: [[100, 999]],
-      error: 'That is not a valid Papua New Guinea postcode. Enter the three digit postcode for the site.'
-    },
-
-    FJ: {
-      name: 'Fiji',
-      field: 'town',
-      label: 'Town or City',
-      hint: 'Fiji does not use postcodes. Enter the town or city where the device is installed.',
-      placeholder: 'Suva',
-      maxLength: 40,
-      digitsOnly: false,
-      error: 'Enter the town or city where the device is installed, at least two letters.'
-    }
-
-  };
-
-  const form = document.getElementById('lookupForm');
-  const serialInput = document.getElementById('serial');
-  const serialHint = document.getElementById('serialHint');
-  const noSerial = document.getElementById('noSerial');
-  const countrySelect = document.getElementById('country');
-  const locality = document.getElementById('locality');
-  const localityLabel = document.getElementById('localityLabel');
-  const localityHint = document.getElementById('localityHint');
-  const submitBtn = document.getElementById('submitBtn');
-  const btnLabel = document.getElementById('btnLabel');
-  const status = document.getElementById('status');
-
-  let errorTimer = null;
-  let locked = false;
-
-  function rules() {
-    return COUNTRIES[countrySelect.value];
-  }
-
-  function setStatus(message) {
-    status.textContent = message || '';
-    status.classList.toggle('show', Boolean(message));
-    status.classList.toggle('error', Boolean(message));
-  }
-
-  function markField(input, hint, bad, message) {
-
-    input.classList.toggle('invalid', bad);
-
-    input.setAttribute(
-      'aria-invalid',
-      bad ? 'true' : 'false'
-    );
-
-    if (!hint) {
-      return;
-    }
-
-    hint.classList.toggle('invalid', bad);
-
-    if (bad && message) {
-      hint.textContent = message;
-    } else if (!bad) {
-      hint.textContent =
-        hint.dataset.default || hint.textContent;
-    }
-  }
-
-  function clearErrors() {
-
-    if (locked) {
-      return;
-    }
-
-    clearTimeout(errorTimer);
-
-    submitBtn.classList.remove('error');
-    btnLabel.textContent = 'Submit';
-
-    markField(
-      serialInput,
-      serialHint,
-      false
-    );
-
-    markField(
-      locality,
-      localityHint,
-      false
-    );
-
-    setStatus('');
-  }
-
-  function failValidation(
-    input,
-    hint,
-    message,
-    hintMessage
-  ) {
-
-    clearTimeout(errorTimer);
-
-    markField(
-      input,
-      hint,
-      true,
-      hintMessage
-    );
-
-    setStatus(message);
-
-    submitBtn.classList.remove('error');
-
-    void submitBtn.offsetWidth;
-
-    submitBtn.classList.add('error');
-
-    btnLabel.textContent =
-      'Check the highlighted field';
-
-    errorTimer = setTimeout(function () {
-
-      submitBtn.classList.remove('error');
-
-      btnLabel.textContent = 'Submit';
-
-    }, ERROR_RESET_MS);
-
-    input.focus();
-  }
-
-  function applyCountry() {
-
-    const r = rules();
-
-    localityLabel.textContent = r.label;
-
-    localityHint.dataset.default = r.hint;
-    localityHint.textContent = r.hint;
-
-    locality.placeholder = r.placeholder;
-
-    locality.maxLength = r.maxLength;
-
-    locality.value = '';
-
-    locality.setAttribute(
-      'inputmode',
-      r.digitsOnly ? 'numeric' : 'text'
-    );
-
-    locality.setAttribute(
-      'autocomplete',
-      r.digitsOnly
-        ? 'postal-code'
-        : 'address-level2'
-    );
-
-    clearErrors();
-  }
-
-  serialInput.addEventListener(
-    'input',
-    function () {
-
-      this.value = this.value
-        .replace(/[^a-zA-Z0-9]/g, '')
-        .toUpperCase()
-        .slice(0, MAX_SERIAL_LENGTH);
-
-      clearErrors();
-    }
-  );
-
-  locality.addEventListener(
-    'input',
-    function () {
-
-      const r = rules();
-
-      if (r.digitsOnly) {
-
-        this.value = this.value
-          .replace(/\D/g, '')
-          .slice(0, r.maxLength);
-
-      } else {
-
-        this.value = this.value
-          .replace(/[^a-zA-Z\s'.-]/g, '')
-          .slice(0, r.maxLength);
+      function rules() {
+        return COUNTRIES[countrySelect.value];
       }
 
-      clearErrors();
-    }
-  );
-
-  countrySelect.addEventListener(
-    'change',
-    applyCountry
-  );
-
-  noSerial.addEventListener(
-    'change',
-    function () {
-
-      serialInput.disabled = this.checked;
-
-      if (this.checked) {
-        serialInput.value = '';
+      function setStatus(message) {
+        status.textContent = message || '';
+        status.classList.toggle('show', Boolean(message));
+        status.classList.toggle('error', Boolean(message));
       }
 
-      clearErrors();
-    }
-  );
-
-  function isValidLocality(value) {
-
-    const r = rules();
-
-    if (r.field === 'town') {
-
-      return value
-        .replace(/[^a-zA-Z]/g, '')
-        .length >= 2;
-    }
-
-    if (!r.pattern.test(value)) {
-      return false;
-    }
-
-    const n = parseInt(value, 10);
-
-    return r.ranges.some(function (range) {
-      return n >= range[0] && n <= range[1];
-    });
-  }
-
-  function lock() {
-
-    locked = true;
-
-    serialInput.disabled = true;
-    locality.disabled = true;
-    countrySelect.disabled = true;
-    noSerial.disabled = true;
-    submitBtn.disabled = true;
-
-    submitBtn.classList.remove('error');
-    submitBtn.classList.add('submitted');
-
-    btnLabel.textContent = 'Details sent';
-  }
-
-  form.addEventListener(
-    'submit',
-    function (e) {
-
-      e.preventDefault();
-
-      if (locked) {
-        return;
+      function clearErrors() {
+        if (locked) { return; }
+        clearTimeout(errorTimer);
+        submitBtn.classList.remove('error');
+        btnLabel.textContent = DEFAULT_LABEL;
+        serialInput.classList.remove('invalid');
+        serialHint.classList.remove('invalid');
+        locality.classList.remove('invalid');
+        localityHint.classList.remove('invalid');
+        setStatus('');
       }
 
-      const r = rules();
+      function fail(input, hint, message) {
+        clearTimeout(errorTimer);
+        input.classList.add('invalid');
+        hint.classList.add('invalid');
+        setStatus(message);
 
-      const serial =
-        serialInput.value.trim();
+        submitBtn.classList.remove('error');
+        void submitBtn.offsetWidth;
+        submitBtn.classList.add('error');
+        btnLabel.textContent = 'Check the highlighted field';
 
-      const localityValue =
-        locality.value.trim();
+        errorTimer = setTimeout(function () {
+          submitBtn.classList.remove('error');
+          btnLabel.textContent = DEFAULT_LABEL;
+        }, 2000);
 
-      const skipSerial =
-        noSerial.checked;
-
-      if (!skipSerial && serial.length === 0) {
-
-        failValidation(
-          serialInput,
-          serialHint,
-          'Enter your serial number, or tick the box if you cannot find it.',
-          'Serial number is required.'
-        );
-
-        return;
+        input.focus();
       }
 
-      if (localityValue.length === 0) {
-
-        failValidation(
-          locality,
-          localityHint,
-          r.field === 'town'
-            ? 'Enter the site town or city.'
-            : 'Enter the site postcode.',
-          r.field === 'town'
-            ? 'Town or city is required.'
-            : 'Postcode is required.'
-        );
-
-        return;
+      function applyCountry() {
+        const r = rules();
+        localityLabel.textContent = r.label;
+        localityHint.textContent = r.hint;
+        locality.placeholder = r.placeholder;
+        locality.maxLength = r.maxLength;
+        locality.value = '';
+        clearErrors();
       }
 
-      if (!isValidLocality(localityValue)) {
+      serialInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, MAX_SERIAL);
+        clearErrors();
+      });
 
-        failValidation(
-          locality,
-          localityHint,
-          r.error,
-          r.error
-        );
+      locality.addEventListener('input', function () {
+        const r = rules();
+        if (r.digitsOnly) {
+          this.value = this.value.replace(/\D/g, '').slice(0, r.maxLength);
+        } else {
+          this.value = this.value.replace(/[^a-zA-Z\s'.-]/g, '').slice(0, r.maxLength);
+        }
+        clearErrors();
+      });
 
-        return;
+      countrySelect.addEventListener('change', applyCountry);
+
+      noSerial.addEventListener('change', function () {
+        serialInput.disabled = this.checked;
+        if (this.checked) { serialInput.value = ''; }
+        clearErrors();
+      });
+
+      function localityValid(value) {
+        const r = rules();
+        if (!r.digitsOnly) {
+          return value.replace(/[^a-zA-Z]/g, '').length >= 2;
+        }
+        if (!r.pattern.test(value)) { return false; }
+        const n = parseInt(value, 10);
+        return r.ranges.some(function (range) {
+          return n >= range[0] && n <= range[1];
+        });
       }
 
-      /*
-       * THIS IS THE IMPORTANT PART.
-       *
-       * This matches the working custom component exactly:
-       *
-       * parent.window.postMessage(
-       *   'widget-message:' + message,
-       *   '*'
-       * );
-       */
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (locked) { return; }
 
-      const localityKey =
-        r.field === 'town'
-          ? 'Town'
-          : 'Post Code';
+        const r = rules();
+        const serial = serialInput.value.trim();
+        const localityValue = locality.value.trim();
+        const skipSerial = noSerial.checked;
 
-      const serialValue =
-        skipSerial
-          ? 'Not known'
-          : serial;
+        if (!skipSerial && !serial) {
+          fail(serialInput, serialHint, 'Please enter your serial number, or tick the box if you cannot find it.');
+          return;
+        }
 
-      const message =
-        `Serial Number: ${serialValue}, ${localityKey}: ${localityValue}`;
+        if (!skipSerial && (serial.length < MIN_SERIAL || serial.length > MAX_SERIAL)) {
+          fail(serialInput, serialHint, 'Serial numbers are between ' + MIN_SERIAL + ' and ' + MAX_SERIAL + ' characters.');
+          return;
+        }
 
-      try {
+        if (!localityValue) {
+          fail(locality, localityHint, 'Please enter the ' + r.label.toLowerCase() + '.');
+          return;
+        }
 
-        parent.window.postMessage(
-          'widget-message:' + message,
-          '*'
-        );
+        if (!localityValid(localityValue)) {
+          fail(locality, localityHint, r.error);
+          return;
+        }
 
-        lock();
+        try {
+          parent.window.postMessage(
+            'widget-message:Serial Number: ' + (skipSerial ? 'Not known' : serial) + ', ' + r.key + ': ' + localityValue,
+            '*'
+          );
+          locked = true;
+          serialInput.disabled = true;
+          locality.disabled = true;
+          countrySelect.disabled = true;
+          noSerial.disabled = true;
+          submitBtn.disabled = true;
+          submitBtn.classList.remove('error');
+          submitBtn.classList.add('submitted');
+          btnLabel.textContent = 'Details sent';
+        } catch (err) {
+          console.error(err);
+          setStatus('Unable to connect to chat widget.');
+        }
+      });
 
-      } catch (err) {
-
-        console.error(err);
-
-        setStatus(
-          'Unable to connect to chat widget.'
-        );
-      }
-
-    }
-  );
-
-  applyCountry();
-
-})();
-</script>
-
+      applyCountry();
+    })();
+  </script>
 </body>
 </html>
