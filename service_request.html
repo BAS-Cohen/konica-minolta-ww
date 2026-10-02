@@ -274,6 +274,30 @@
       const ERROR_RESET_MS = 2000;
       const MAX_DESC = 500;
 
+      // National digit counts, country code excluded.
+      // Australia and New Zealand 9, Papua New Guinea 8, Fiji 7.
+      const PHONE_RULES = {
+        '+61':  { min: 9, max: 9,  name: 'Australian' },
+        '+64':  { min: 8, max: 9,  name: 'New Zealand' },
+        '+675': { min: 8, max: 8,  name: 'Papua New Guinea' },
+        '+679': { min: 7, max: 7,  name: 'Fiji' }
+      };
+
+      // Longest national number across the countries we serve.
+      const FALLBACK_RULE = { min: 7, max: 9, name: '' };
+
+      function phoneRule() {
+        return PHONE_RULES[fields.countryCode.value.trim()] || FALLBACK_RULE;
+      }
+
+      function capPhone() {
+        const max = phoneRule().max;
+        const digits = fields.contactPhone.value.replace(/\D/g, '');
+        if (digits.length > max) {
+          fields.contactPhone.value = digits.slice(0, max);
+        }
+      }
+
       const form = document.getElementById('serviceForm');
       const submitBtn = document.getElementById('submitBtn');
       const btnLabel = document.getElementById('btnLabel');
@@ -343,6 +367,7 @@
       fields.countryCode.addEventListener('input', function () {
         let v = this.value.replace(/[^0-9+]/g, '').replace(/\+/g, '');
         this.value = v.length ? '+' + v.slice(0, 4) : '+';
+        capPhone();
         clearErrors();
       });
 
@@ -352,6 +377,7 @@
 
       fields.contactPhone.addEventListener('input', function () {
         this.value = this.value.replace(/[^0-9()\-\s]/g, '');
+        capPhone();
         clearErrors();
       });
 
@@ -406,9 +432,14 @@
           return;
         }
 
+        const rule = phoneRule();
         const digits = phone.replace(/\D/g, '');
-        if (digits.length < 7 || digits.length > 12) {
-          fail('contactPhone', 'Enter a valid contact phone number, without the country code.');
+
+        if (digits.length < rule.min || digits.length > rule.max) {
+          const expected = rule.min === rule.max
+            ? rule.max + ' digits'
+            : rule.min + ' to ' + rule.max + ' digits';
+          fail('contactPhone', 'Enter a ' + (rule.name ? rule.name + ' ' : '') + 'phone number, ' + expected + ' without the country code.');
           return;
         }
 
