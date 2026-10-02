@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Callback Number</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: transparent;
+      padding: 12px 16px;
+      color: #1a1a2e;
+    }
+
+    .heading {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .form-group { margin-bottom: 8px; }
+
+    label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 3px;
+    }
+
+    .optional { font-weight: 400; color: #9aa9b8; }
+
+    textarea {
+      width: 100%;
+      min-height: 54px;
+      resize: none;
+      padding: 9px 11px;
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d8dee6;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-family: inherit;
+      line-height: 1.4;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #1a3a5c;
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.12);
+    }
+
+    textarea:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: #f9fafb;
+    }
+
+    textarea::placeholder { color: #9ca3af; }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 9px 11px;
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d8dee6;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      line-height: 1.35;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #1a3a5c;
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.12);
+    }
+
+    input[type="text"].invalid {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    }
+
+    input:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: #f9fafb;
+    }
+
+    input::placeholder { color: #9ca3af; }
+
+    .phone-line { display: flex; gap: 6px; }
+
+    .phone-line .cc {
+      flex: 0 0 62px;
+      text-align: center;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+    .phone-line .num { flex: 1 1 auto; min-width: 0; }
+
+    .hint {
+      margin-top: 5px;
+      font-size: 11px;
+      color: #6b7280;
+      transition: color 0.15s ease;
+    }
+
+    .hint.invalid { color: #dc2626; }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 13px;
+      background: linear-gradient(135deg, #1a3a5c 0%, #27547e 100%);
+      color: #ffffff;
+      border: 1px solid #1a3a5c;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter 0.2s ease, box-shadow 0.2s ease, transform 0.18s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .submit-btn:hover:not(:disabled):not(.error) {
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(26, 58, 92, 0.3);
+    }
+
+    .submit-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+    }
+
+    .submit-btn.error {
+      background: #fef2f2;
+      border-color: #dc2626;
+      color: #b91c1c;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+    }
+
+    .submit-btn.submitted {
+      cursor: default;
+      transform: none;
+      animation: pulseRing 0.6s ease;
+    }
+
+    @keyframes pulseRing {
+      0%   { box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.45); }
+      100% { box-shadow: 0 4px 16px rgba(26, 58, 92, 0.28); }
+    }
+
+    .submit-btn:disabled { opacity: 1; }
+
+    .tick {
+      flex: 0 0 auto;
+      width: 15px;
+      height: 15px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.15s ease, transform 0.2s ease;
+    }
+
+    .tick path {
+      stroke: #ffffff;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      transition: stroke-dashoffset 0.35s ease 0.05s;
+    }
+
+    .submit-btn.submitted .tick { opacity: 1; transform: scale(1); }
+    .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
+
+    .status {
+      margin-top: 7px;
+      font-size: 11.5px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      display: none;
+    }
+
+    .status.show { display: block; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .tick { opacity: 0; }
+      .submit-btn.submitted .tick { opacity: 1; }
+      .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="heading">What number should we call you on?</p>
+
+  <form id="phoneForm" novalidate>
+
+    <div class="form-group">
+      <label for="phone">Callback Number</label>
+      <div class="phone-line">
+        <input type="text" id="countryCode" class="cc" value="+61" placeholder="+61" maxlength="5" inputmode="tel" aria-label="Country code">
+        <input type="text" id="phone" class="num" placeholder="2 9123 4567" maxlength="20" autocomplete="tel" inputmode="tel">
+      </div>
+      <div class="hint" id="phoneHint" data-default="Drop the leading zero after the country code.">Drop the leading zero after the country code.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="extraNotes">Anything else we should know about your issue? <span class="optional">(optional)</span></label>
+      <textarea id="extraNotes" placeholder="Anything that will help the consultant before they call." maxlength="300"></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      <span id="btnLabel">Submit number</span>
+      <svg class="tick" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10.5 8 14.5 16 5.5"/>
+      </svg>
+    </button>
+
+  </form>
+
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      const DEFAULT_LABEL = 'Submit number';
+      const ERROR_RESET_MS = 2000;
+
+      // National digit counts, country code excluded.
+      const PHONE_RULES = {
+        '+61':  { min: 9, max: 9, name: 'Australian' },
+        '+64':  { min: 8, max: 9, name: 'New Zealand' },
+        '+675': { min: 8, max: 8, name: 'Papua New Guinea' },
+        '+679': { min: 7, max: 7, name: 'Fiji' }
+      };
+
+      const FALLBACK_RULE = { min: 7, max: 9, name: '' };
+
+      const form = document.getElementById('phoneForm');
+      const countryCode = document.getElementById('countryCode');
+      const phone = document.getElementById('phone');
+      const phoneHint = document.getElementById('phoneHint');
+      const extraNotes = document.getElementById('extraNotes');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnLabel = document.getElementById('btnLabel');
+      const status = document.getElementById('status');
+
+      let errorTimer = null;
+      let locked = false;
+
+      function rule() {
+        return PHONE_RULES[countryCode.value.trim()] || FALLBACK_RULE;
+      }
+
+      function capPhone() {
+        const max = rule().max;
+        const digits = phone.value.replace(/\D/g, '');
+        if (digits.length > max) {
+          phone.value = digits.slice(0, max);
+        }
+      }
+
+      function setStatus(message) {
+        status.textContent = message || '';
+        status.classList.toggle('show', Boolean(message));
+        status.classList.toggle('error', Boolean(message));
+      }
+
+      function clearErrors() {
+        if (locked) { return; }
+        clearTimeout(errorTimer);
+        submitBtn.classList.remove('error');
+        btnLabel.textContent = DEFAULT_LABEL;
+        countryCode.classList.remove('invalid');
+        phone.classList.remove('invalid');
+        phoneHint.classList.remove('invalid');
+        phoneHint.textContent = phoneHint.dataset.default;
+        setStatus('');
+      }
+
+      function fail(field, message) {
+        clearTimeout(errorTimer);
+
+        field.classList.add('invalid');
+        field.setAttribute('aria-invalid', 'true');
+        phoneHint.classList.add('invalid');
+        phoneHint.textContent = message;
+        setStatus(message);
+
+        submitBtn.classList.remove('error');
+        void submitBtn.offsetWidth;
+        submitBtn.classList.add('error');
+        btnLabel.textContent = 'Check the number';
+
+        errorTimer = setTimeout(function () {
+          submitBtn.classList.remove('error');
+          btnLabel.textContent = DEFAULT_LABEL;
+        }, ERROR_RESET_MS);
+
+        field.focus();
+      }
+
+      countryCode.addEventListener('input', function () {
+        let v = this.value.replace(/[^0-9+]/g, '').replace(/\+/g, '');
+        this.value = v.length ? '+' + v.slice(0, 4) : '+';
+        capPhone();
+        clearErrors();
+      });
+
+      countryCode.addEventListener('focus', function () {
+        if (!this.value) { this.value = '+'; }
+      });
+
+      phone.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9()\-\s]/g, '');
+        capPhone();
+        clearErrors();
+      });
+
+      extraNotes.addEventListener('input', clearErrors);
+
+      function lock() {
+        locked = true;
+        countryCode.disabled = true;
+        phone.disabled = true;
+        extraNotes.disabled = true;
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('error');
+        submitBtn.classList.add('submitted');
+        btnLabel.textContent = 'Number sent';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (locked) { return; }
+
+        const cc = countryCode.value.trim();
+
+        if (!/^\+\d{1,4}$/.test(cc)) {
+          fail(countryCode, 'Enter a country code, for example +61.');
+          return;
+        }
+
+        const r = rule();
+        const digits = phone.value.replace(/\D/g, '');
+
+        if (digits.length === 0) {
+          fail(phone, 'Enter the number we should call you on.');
+          return;
+        }
+
+        if (digits.length < r.min || digits.length > r.max) {
+          const expected = r.min === r.max
+            ? r.max + ' digits'
+            : r.min + ' to ' + r.max + ' digits';
+          fail(phone, 'Enter a ' + (r.name ? r.name + ' ' : '') + 'number, ' + expected + ' without the country code.');
+          return;
+        }
+
+        // E.164 for the downstream case record.
+        const notes = extraNotes.value.trim().replace(/\s*\n\s*/g, ' ');
+        const message = 'Callback Number: ' + cc + digits +
+          ', Additional Notes: ' + (notes ? notes : 'None');
+
+        try {
+          parent.window.postMessage('widget-message:' + message, '*');
+          lock();
+        } catch (err) {
+          console.error(err);
+          setStatus('Unable to connect to chat widget.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
