@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Request</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: transparent;
+      padding: 12px 16px;
+      color: #1a1a2e;
+    }
+
+    .heading {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: riseIn 0.35s ease forwards;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 7px; }
+
+    .option-btn {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 12px;
+      background: #ffffff;
+      color: #1a1a2e;
+      border: 1px solid #d8dee6;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 500;
+      line-height: 1.3;
+      cursor: pointer;
+      text-align: left;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(6px);
+      animation: riseIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.18s ease;
+    }
+
+    .option-btn:nth-child(1) { animation-delay: 0.04s; }
+    .option-btn:nth-child(2) { animation-delay: 0.09s; }
+
+    @keyframes riseIn { to { opacity: 1; transform: translateY(0); } }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: #1a3a5c;
+      background: #f6f9fc;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(26, 58, 92, 0.13);
+    }
+
+    .option-btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(26, 58, 92, 0.12);
+    }
+
+    .option-btn:focus-visible {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+    }
+
+    .option-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .option-btn.selected:disabled { opacity: 1; }
+
+    .label { flex: 1 1 auto; }
+
+    .badge {
+      flex: 0 0 auto;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #e8f0fe;
+      color: #1a3a5c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.25s ease;
+    }
+
+    .badge svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .option-btn:hover:not(:disabled) .badge {
+      background: #1a3a5c;
+      color: #ffffff;
+      transform: scale(1.04);
+    }
+
+    .chev {
+      flex: 0 0 auto;
+      width: 14px;
+      height: 14px;
+      color: #9aa9b8;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+    }
+
+    .chev svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .option-btn:hover:not(:disabled) .chev {
+      opacity: 1;
+      transform: translateX(0);
+      color: #1a3a5c;
+    }
+
+    .option-btn.selected {
+      background: linear-gradient(135deg, #1a3a5c 0%, #27547e 100%);
+      border-color: #1a3a5c;
+      color: #ffffff;
+      font-weight: 600;
+      transform: translateY(0);
+      box-shadow: 0 4px 16px rgba(26, 58, 92, 0.28);
+      animation: pulseRing 0.6s ease;
+    }
+
+    .option-btn.selected .badge {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .option-btn.selected .chev { opacity: 0; }
+
+    @keyframes pulseRing {
+      0%   { box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.45); }
+      100% { box-shadow: 0 4px 16px rgba(26, 58, 92, 0.28); }
+    }
+
+    .badge .tick-path {
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      transition: stroke-dashoffset 0.35s ease 0.08s;
+    }
+
+    .option-btn.selected .badge .tick-path { stroke-dashoffset: 0; }
+    .badge .icon-path { transition: opacity 0.15s ease; }
+    .option-btn.selected .badge .icon-path { opacity: 0; }
+
+    .status {
+      margin-top: 8px;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .status.show { display: block; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .heading, .option-btn { opacity: 1; transform: none; }
+      .badge .tick-path { stroke-dashoffset: 22; }
+      .option-btn.selected .badge .tick-path { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="heading">What would you like to do?</p>
+
+  <div class="options" id="options">
+
+    <button class="option-btn" type="button" data-value="I want to view an existing service request.">
+      <span class="badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <g class="icon-path">
+            <circle cx="11" cy="11" r="6"/>
+            <path d="M15.5 15.5 20 20"/>
+            <path d="M8.5 11h5"/>
+          </g>
+          <path class="tick-path" d="M5 12.5 10 17.5 19 6.5"/>
+        </svg>
+      </span>
+      <span class="label">View an existing service request</span>
+      <span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span>
+    </button>
+
+    <button class="option-btn" type="button" data-value="I want to create a new service request.">
+      <span class="badge">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <g class="icon-path">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </g>
+          <path class="tick-path" d="M5 12.5 10 17.5 19 6.5"/>
+        </svg>
+      </span>
+      <span class="label">Create a new service request</span>
+      <span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></span>
+    </button>
+
+  </div>
+
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      const buttons = Array.from(document.querySelectorAll('.option-btn'));
+      const status = document.getElementById('status');
+
+      let locked = false;
+
+      function setStatus(message) {
+        status.textContent = message || '';
+        status.classList.toggle('show', Boolean(message));
+        status.classList.toggle('error', Boolean(message));
+      }
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (locked) { return; }
+
+          try {
+            parent.window.postMessage('widget-message:' + this.getAttribute('data-value'), '*');
+            locked = true;
+            this.classList.add('selected');
+            buttons.forEach(function (b) { b.disabled = true; });
+          } catch (err) {
+            console.error(err);
+            setStatus('Unable to connect to chat widget.');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
