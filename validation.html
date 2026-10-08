@@ -25,7 +25,7 @@
       color: #4b5563;
       margin-bottom: 4px;
     }
-    input[type="text"], select {
+    input[type="text"] {
       width: 100%;
       padding: 10px 12px;
       background: white;
@@ -36,24 +36,16 @@
       font-family: inherit;
       transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
     }
-    select {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.6' d='M1 1.5 6 6.5l5-5'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 34px;
-      cursor: pointer;
-    }
-    input[type="text"]:focus, select:focus {
+    input[type="text"]:focus {
       outline: none;
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
-    input[type="text"].invalid, select.invalid {
+    input[type="text"].invalid {
       border-color: #dc2626;
       box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
     }
-    input[type="text"]:disabled, select:disabled {
+    input[type="text"]:disabled {
       opacity: 0.55;
       cursor: not-allowed;
       background: #f9fafb;
@@ -186,26 +178,16 @@
       <div class="hint" id="serialHint">Between 10 and 18 characters. Hardware serials start with SA.</div>
     </div>
 
-    <label class="unknown" for="noSerial">
-      <input type="checkbox" id="noSerial">
-      <span>I do not know my serial number</span>
+    <div class="form-group">
+      <label for="postcode">Post Code</label>
+      <input type="text" id="postcode" placeholder="2113" maxlength="4" autocomplete="postal-code" inputmode="numeric">
+      <div class="hint" id="postcodeHint">The postcode where the device is installed.</div>
+    </div>
+
+    <label class="unknown" for="unknown">
+      <input type="checkbox" id="unknown">
+      <span>I do not know my postcode or serial number</span>
     </label>
-
-    <div class="form-group">
-      <label for="country">Country</label>
-      <select id="country">
-        <option value="AU" selected>Australia</option>
-        <option value="NZ">New Zealand</option>
-        <option value="FJ">Fiji</option>
-        <option value="PG">Papua New Guinea</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="locality" id="localityLabel">Post Code</label>
-      <input type="text" id="locality" placeholder="2113" maxlength="4" autocomplete="postal-code">
-      <div class="hint" id="localityHint">The postcode where the device is installed.</div>
-    </div>
 
     <button type="submit" class="submit-btn" id="submitBtn">
       <span id="btnLabel">Submit device details</span>
@@ -220,80 +202,18 @@
       const MIN_SERIAL = 10;
       const MAX_SERIAL = 18;
 
-      const COUNTRIES = {
-        AU: {
-          name: 'Australia',
-          key: 'Post Code',
-          label: 'Post Code',
-          hint: 'The postcode where the device is installed.',
-          placeholder: '2113',
-          maxLength: 4,
-          digitsOnly: true,
-          pattern: /^\d{4}$/,
-          ranges: [
-            [200, 299], [800, 999], [1000, 2599], [2600, 2618], [2619, 2899],
-            [2900, 2920], [2921, 2999], [3000, 3999], [4000, 4999], [5000, 5999],
-            [6000, 6797], [6800, 6999], [7000, 7999], [8000, 8999], [9000, 9999]
-          ],
-          error: 'Please enter a valid Australian postcode.'
-        },
-        NZ: {
-          name: 'New Zealand',
-          key: 'Post Code',
-          label: 'Post Code',
-          hint: 'The four digit postcode where the device is installed.',
-          placeholder: '1010',
-          maxLength: 4,
-          digitsOnly: true,
-          pattern: /^\d{4}$/,
-          ranges: [
-            [110, 999], [1010, 2999], [3010, 3999], [4110, 4999], [5010, 5999],
-            [6011, 6999], [7010, 7999], [8011, 8999], [9010, 9893]
-          ],
-          error: 'Please enter a valid New Zealand postcode.'
-        },
-        PG: {
-          name: 'Papua New Guinea',
-          key: 'Post Code',
-          label: 'Post Code',
-          hint: 'Papua New Guinea postcodes are three digits, for example 121.',
-          placeholder: '121',
-          maxLength: 3,
-          digitsOnly: true,
-          pattern: /^\d{3}$/,
-          ranges: [[100, 999]],
-          error: 'Please enter a valid Papua New Guinea postcode.'
-        },
-        FJ: {
-          name: 'Fiji',
-          key: 'Town',
-          label: 'Town or City',
-          hint: 'Fiji does not use postcodes. Enter the town or city.',
-          placeholder: 'Suva',
-          maxLength: 40,
-          digitsOnly: false,
-          error: 'Please enter the town or city where the device is installed.'
-        }
-      };
-
       const form = document.getElementById('lookupForm');
       const serialInput = document.getElementById('serial');
       const serialHint = document.getElementById('serialHint');
-      const noSerial = document.getElementById('noSerial');
-      const countrySelect = document.getElementById('country');
-      const locality = document.getElementById('locality');
-      const localityLabel = document.getElementById('localityLabel');
-      const localityHint = document.getElementById('localityHint');
+      const postcode = document.getElementById('postcode');
+      const postcodeHint = document.getElementById('postcodeHint');
+      const unknown = document.getElementById('unknown');
       const submitBtn = document.getElementById('submitBtn');
       const btnLabel = document.getElementById('btnLabel');
       const status = document.getElementById('status');
 
       let errorTimer = null;
       let locked = false;
-
-      function rules() {
-        return COUNTRIES[countrySelect.value];
-      }
 
       function setStatus(message) {
         status.textContent = message || '';
@@ -308,8 +228,8 @@
         btnLabel.textContent = DEFAULT_LABEL;
         serialInput.classList.remove('invalid');
         serialHint.classList.remove('invalid');
-        locality.classList.remove('invalid');
-        localityHint.classList.remove('invalid');
+        postcode.classList.remove('invalid');
+        postcodeHint.classList.remove('invalid');
         setStatus('');
       }
 
@@ -332,90 +252,68 @@
         input.focus();
       }
 
-      function applyCountry() {
-        const r = rules();
-        localityLabel.textContent = r.label;
-        localityHint.textContent = r.hint;
-        locality.placeholder = r.placeholder;
-        locality.maxLength = r.maxLength;
-        locality.value = '';
-        clearErrors();
-      }
-
       serialInput.addEventListener('input', function () {
         this.value = this.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, MAX_SERIAL);
         clearErrors();
       });
 
-      locality.addEventListener('input', function () {
-        const r = rules();
-        if (r.digitsOnly) {
-          this.value = this.value.replace(/\D/g, '').slice(0, r.maxLength);
-        } else {
-          this.value = this.value.replace(/[^a-zA-Z\s'.-]/g, '').slice(0, r.maxLength);
-        }
+      postcode.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '').slice(0, 4);
         clearErrors();
       });
 
-      countrySelect.addEventListener('change', applyCountry);
-
-      noSerial.addEventListener('change', function () {
-        serialInput.disabled = this.checked;
-        if (this.checked) { serialInput.value = ''; }
+      // Ticking the box clears and disables both fields.
+      unknown.addEventListener('change', function () {
+        const skip = this.checked;
+        serialInput.disabled = skip;
+        postcode.disabled = skip;
+        if (skip) {
+          serialInput.value = '';
+          postcode.value = '';
+        }
         clearErrors();
       });
-
-      function localityValid(value) {
-        const r = rules();
-        if (!r.digitsOnly) {
-          return value.replace(/[^a-zA-Z]/g, '').length >= 2;
-        }
-        if (!r.pattern.test(value)) { return false; }
-        const n = parseInt(value, 10);
-        return r.ranges.some(function (range) {
-          return n >= range[0] && n <= range[1];
-        });
-      }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         if (locked) { return; }
 
-        const r = rules();
+        const skip = unknown.checked;
         const serial = serialInput.value.trim();
-        const localityValue = locality.value.trim();
-        const skipSerial = noSerial.checked;
+        const code = postcode.value.trim();
 
-        if (!skipSerial && !serial) {
-          fail(serialInput, serialHint, 'Please enter your serial number, or tick the box if you cannot find it.');
-          return;
-        }
+        if (!skip) {
+          if (!serial) {
+            fail(serialInput, serialHint, 'Please enter your serial number, or tick the box below if you cannot find it.');
+            return;
+          }
 
-        if (!skipSerial && (serial.length < MIN_SERIAL || serial.length > MAX_SERIAL)) {
-          fail(serialInput, serialHint, 'Serial numbers are between ' + MIN_SERIAL + ' and ' + MAX_SERIAL + ' characters.');
-          return;
-        }
+          if (serial.length < MIN_SERIAL || serial.length > MAX_SERIAL) {
+            fail(serialInput, serialHint, 'Serial numbers are between ' + MIN_SERIAL + ' and ' + MAX_SERIAL + ' characters.');
+            return;
+          }
 
-        if (!localityValue) {
-          fail(locality, localityHint, 'Please enter the ' + r.label.toLowerCase() + '.');
-          return;
-        }
+          if (!code) {
+            fail(postcode, postcodeHint, 'Please enter the postcode where the device is installed.');
+            return;
+          }
 
-        if (!localityValid(localityValue)) {
-          fail(locality, localityHint, r.error);
-          return;
+          if (code.length < 3) {
+            fail(postcode, postcodeHint, 'Please enter a valid postcode.');
+            return;
+          }
         }
 
         try {
           parent.window.postMessage(
-            'widget-message:Serial Number: ' + (skipSerial ? 'Not known' : serial) + ', ' + r.key + ': ' + localityValue,
+            'widget-message:Serial Number: ' + (skip ? 'Not known' : serial) +
+            ', Post Code: ' + (skip ? 'Not known' : code),
             '*'
           );
           locked = true;
           serialInput.disabled = true;
-          locality.disabled = true;
-          countrySelect.disabled = true;
-          noSerial.disabled = true;
+          postcode.disabled = true;
+          unknown.disabled = true;
           submitBtn.disabled = true;
           submitBtn.classList.remove('error');
           submitBtn.classList.add('submitted');
@@ -425,8 +323,6 @@
           setStatus('Unable to connect to chat widget.');
         }
       });
-
-      applyCountry();
     })();
   </script>
 </body>
