@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Escalate to a Consultant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: transparent;
+      padding: 10px 14px;
+      color: #1a1a2e;
+    }
+
+    .heading {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .sub {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .form-group { margin-bottom: 8px; }
+
+    .row { display: flex; gap: 7px; flex-wrap: wrap; }
+    .row .form-group { flex: 1 1 140px; min-width: 128px; }
+
+    label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 3px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px 10px;
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d8dee6;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-family: inherit;
+      line-height: 1.35;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    textarea { min-height: 62px; resize: none; }
+
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: #1a3a5c;
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.12);
+    }
+
+    input[type="text"].invalid, textarea.invalid {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    }
+
+    input:disabled, textarea:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: #f9fafb;
+    }
+
+    input::placeholder, textarea::placeholder { color: #9ca3af; }
+
+    .phone-line { display: flex; gap: 5px; }
+    .phone-line .cc {
+      flex: 0 0 56px;
+      text-align: center;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+    .phone-line .num { flex: 1 1 auto; min-width: 0; }
+
+    .counter {
+      margin-top: 3px;
+      font-size: 10.5px;
+      color: #9aa9b8;
+      text-align: right;
+    }
+
+    .counter.limit { color: #b45309; }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 13px;
+      background: linear-gradient(135deg, #1a3a5c 0%, #27547e 100%);
+      color: #ffffff;
+      border: 1px solid #1a3a5c;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: filter 0.2s ease, box-shadow 0.2s ease, transform 0.18s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .submit-btn:hover:not(:disabled):not(.error) {
+      filter: brightness(1.12);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(26, 58, 92, 0.3);
+    }
+
+    .submit-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+    }
+
+    .submit-btn.error {
+      background: #fef2f2;
+      border-color: #dc2626;
+      color: #b91c1c;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+    }
+
+    .submit-btn.submitted {
+      cursor: default;
+      transform: none;
+      animation: pulseRing 0.6s ease;
+    }
+
+    @keyframes pulseRing {
+      0%   { box-shadow: 0 0 0 0 rgba(26, 58, 92, 0.45); }
+      100% { box-shadow: 0 4px 16px rgba(26, 58, 92, 0.28); }
+    }
+
+    .submit-btn:disabled { opacity: 1; }
+
+    .tick {
+      flex: 0 0 auto;
+      width: 15px;
+      height: 15px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.15s ease, transform 0.2s ease;
+    }
+
+    .tick path {
+      stroke: #ffffff;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 22;
+      stroke-dashoffset: 22;
+      transition: stroke-dashoffset 0.35s ease 0.05s;
+    }
+
+    .submit-btn.submitted .tick { opacity: 1; transform: scale(1); }
+    .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
+
+    .status {
+      margin-top: 7px;
+      font-size: 11.5px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      display: none;
+    }
+
+    .status.show { display: block; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .tick { opacity: 0; }
+      .submit-btn.submitted .tick { opacity: 1; }
+      .submit-btn.submitted .tick path { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <p class="heading">Creating a ticket for you</p>
+  <p class="sub">A few details so we can raise it and get back to you.</p>
+
+  <form id="escalateForm" novalidate>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" placeholder="Jane" maxlength="50" autocomplete="given-name">
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" placeholder="Smith" maxlength="50" autocomplete="family-name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <div class="phone-line">
+        <input type="text" id="countryCode" class="cc" value="+61" placeholder="+61" maxlength="5" inputmode="tel" aria-label="Country code">
+        <input type="text" id="phone" class="num" placeholder="2 9123 4567" maxlength="20" autocomplete="tel" inputmode="tel">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="text" id="email" placeholder="jane.smith@company.com.au" maxlength="120" autocomplete="email" inputmode="email" spellcheck="false">
+    </div>
+
+    <div class="form-group">
+      <label for="company">Company</label>
+      <input type="text" id="company" placeholder="Nexus Group" maxlength="80" autocomplete="organization">
+    </div>
+
+    <div class="form-group">
+      <label for="reason">Reason for the ticket</label>
+      <textarea id="reason" maxlength="400" placeholder="Tell us what you need help with."></textarea>
+      <div class="counter" id="counter">0 / 400</div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      <span id="btnLabel">Create ticket</span>
+      <svg class="tick" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M4 10.5 8 14.5 16 5.5"/>
+      </svg>
+    </button>
+
+  </form>
+
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      const DEFAULT_LABEL = 'Create ticket';
+      const ERROR_RESET_MS = 2000;
+      const MAX_CHARS = 400;
+
+      // National digit counts, country code excluded.
+      const PHONE_RULES = {
+        '+61':  { min: 9, max: 9, name: 'Australian' },
+        '+64':  { min: 8, max: 9, name: 'New Zealand' },
+        '+675': { min: 8, max: 8, name: 'Papua New Guinea' },
+        '+679': { min: 7, max: 7, name: 'Fiji' }
+      };
+
+      const FALLBACK_RULE = { min: 7, max: 9, name: '' };
+
+      const form = document.getElementById('escalateForm');
+      const counter = document.getElementById('counter');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnLabel = document.getElementById('btnLabel');
+      const status = document.getElementById('status');
+
+      const fields = {
+        firstName: document.getElementById('firstName'),
+        lastName: document.getElementById('lastName'),
+        countryCode: document.getElementById('countryCode'),
+        phone: document.getElementById('phone'),
+        email: document.getElementById('email'),
+        company: document.getElementById('company'),
+        reason: document.getElementById('reason')
+      };
+
+      let errorTimer = null;
+      let locked = false;
+
+      function rule() {
+        return PHONE_RULES[fields.countryCode.value.trim()] || FALLBACK_RULE;
+      }
+
+      function capPhone() {
+        const r = rule();
+        let digits = fields.phone.value.replace(/\D/g, '');
+        // Domestic trunk prefix, not part of the international number.
+        if (digits.charAt(0) === '0') { digits = digits.slice(1); }
+        if (digits.length > r.max) { digits = digits.slice(0, r.max); }
+        if (digits !== fields.phone.value.replace(/\D/g, '')) { fields.phone.value = digits; }
+      }
+
+      function setStatus(message) {
+        status.textContent = message || '';
+        status.classList.toggle('show', Boolean(message));
+        status.classList.toggle('error', Boolean(message));
+      }
+
+      function clearErrors() {
+        if (locked) { return; }
+        clearTimeout(errorTimer);
+        submitBtn.classList.remove('error');
+        btnLabel.textContent = DEFAULT_LABEL;
+        Object.keys(fields).forEach(function (key) {
+          fields[key].classList.remove('invalid');
+          fields[key].setAttribute('aria-invalid', 'false');
+        });
+        setStatus('');
+      }
+
+      function fail(key, message) {
+        clearTimeout(errorTimer);
+
+        const field = fields[key];
+        field.classList.add('invalid');
+        field.setAttribute('aria-invalid', 'true');
+        setStatus(message);
+
+        submitBtn.classList.remove('error');
+        void submitBtn.offsetWidth;
+        submitBtn.classList.add('error');
+        btnLabel.textContent = 'Check the highlighted field';
+
+        errorTimer = setTimeout(function () {
+          submitBtn.classList.remove('error');
+          btnLabel.textContent = DEFAULT_LABEL;
+        }, ERROR_RESET_MS);
+
+        field.focus();
+      }
+
+      ['firstName', 'lastName'].forEach(function (key) {
+        fields[key].addEventListener('input', function () {
+          this.value = this.value.replace(/[^a-zA-Z\s'.-]/g, '');
+          clearErrors();
+        });
+      });
+
+      fields.countryCode.addEventListener('input', function () {
+        let v = this.value.replace(/[^0-9+]/g, '').replace(/\+/g, '');
+        this.value = v.length ? '+' + v.slice(0, 4) : '+';
+        capPhone();
+        clearErrors();
+      });
+
+      fields.phone.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9()\-\s]/g, '');
+        capPhone();
+        clearErrors();
+      });
+
+      fields.email.addEventListener('input', function () {
+        this.value = this.value.replace(/\s/g, '');
+        clearErrors();
+      });
+
+      fields.company.addEventListener('input', clearErrors);
+
+      fields.reason.addEventListener('input', function () {
+        const used = this.value.length;
+        counter.textContent = used + ' / ' + MAX_CHARS;
+        counter.classList.toggle('limit', used >= MAX_CHARS);
+        clearErrors();
+      });
+
+      function validEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(value);
+      }
+
+      function lock() {
+        locked = true;
+        Object.keys(fields).forEach(function (key) { fields[key].disabled = true; });
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('error');
+        submitBtn.classList.add('submitted');
+        btnLabel.textContent = 'Details sent';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (locked) { return; }
+
+        const first = fields.firstName.value.trim();
+        const last = fields.lastName.value.trim();
+        const cc = fields.countryCode.value.trim();
+        const phone = fields.phone.value.trim();
+        const email = fields.email.value.trim();
+        const company = fields.company.value.trim();
+        const reason = fields.reason.value.trim();
+
+        if (first.replace(/[^a-zA-Z]/g, '').length < 2) {
+          fail('firstName', 'Enter your first name.');
+          return;
+        }
+
+        if (last.replace(/[^a-zA-Z]/g, '').length < 2) {
+          fail('lastName', 'Enter your last name.');
+          return;
+        }
+
+        if (!/^\+\d{1,4}$/.test(cc)) {
+          fail('countryCode', 'Enter a country code, for example +61.');
+          return;
+        }
+
+        const r = rule();
+        const digits = phone.replace(/\D/g, '');
+
+        if (digits.length < r.min || digits.length > r.max) {
+          const expected = r.min === r.max ? r.max + ' digits' : r.min + ' to ' + r.max + ' digits';
+          fail('phone', 'Enter a ' + (r.name ? r.name + ' ' : '') + 'phone number, ' + expected + ' without the country code.');
+          return;
+        }
+
+        if (!validEmail(email)) {
+          fail('email', 'Enter a valid email address.');
+          return;
+        }
+
+        if (company.length < 2) {
+          fail('company', 'Enter your company name.');
+          return;
+        }
+
+        if (reason.length < 10) {
+          fail('reason', 'Tell us briefly what you need help with.');
+          return;
+        }
+
+        const message =
+          'First Name: ' + first +
+          ', Last Name: ' + last +
+          ', Phone: ' + cc + ' ' + phone +
+          ', Email: ' + email +
+          ', Company: ' + company +
+          ', Reason: ' + reason.replace(/\s*\n\s*/g, ' ');
+
+        try {
+          parent.window.postMessage('widget-message:' + message, '*');
+          lock();
+        } catch (err) {
+          console.error(err);
+          setStatus('Unable to connect to chat widget.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
